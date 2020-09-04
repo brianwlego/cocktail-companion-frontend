@@ -1,0 +1,10 @@
+#page-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#main-search{
+  align-items: center;
+  border: solid, 1px, black;
+}
