@@ -11,12 +11,14 @@
   <div id='page-container'>
     <div id='main-search'>
       <h3>Cocktail Companion</h3>
-      <form>
-        <input list='ingredients-dropdown' name='ingredient' id='ingredient'>
+      <div id="ingredient-list-div">
+        <ul id="ingredient-list"></ul>
+      </div>
+      <!-- <form id="ingredient-form"> -->
+        <input list='ingredients-dropdown' name='ingredient' id='ingredient' placeholder="Add ingredient...">
         <datalist id='ingredients-dropdown'>
-          
         </datalist>
-      </form>
+      <!-- </form> -->
     </div>
   </div>
 </body>
