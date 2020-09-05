@@ -1,15 +1,16 @@
-#page-container{
+#page-container, #ingre-cocktails {
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
-#main-search, #cocktail-btn {
+#main-search {
   align-items: center;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px
 }
+
 
 #cocktail-btn {
   background-color: lightblue;
