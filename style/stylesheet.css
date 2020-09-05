@@ -4,9 +4,23 @@
   justify-content: space-around;
 }
 
-#main-search{
+#main-search, #cocktail-btn {
   align-items: center;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px
+}
+
+#cocktail-btn {
+  background-color: lightblue;
+  padding: 15px 40px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+
+}
+
+#cocktail-btn:hover {
+  background-color: lightcyan;
+  color: black;
 }

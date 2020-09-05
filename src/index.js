@@ -1,7 +1,7 @@
 
 const baseURL = 'http://localhost:3000/'
-const ingredients = 'ingredients'
-const cocktails = 'cocktails'
+const ingredients = 'ingredients/'
+const cocktails = 'cocktails/'
 
 const ingreInput = document.querySelector('input#ingredient')
 const searchDiv = document.getElementById('main-search')
@@ -45,16 +45,30 @@ function renderIngreToList(ingreObj){
   <button id="ingredient-remove">x</button>
   </li>
   `)
+  findCocktailsWithIngre(ingreObj)
 }
 searchDiv.addEventListener('click', e => {
   if (e.target.matches('button#ingredient-remove')){
     e.target.parentElement.remove()
+
   }
 })
 //-------------------------------------------------------//
 
 //FUNCTIONS DEALING WITH COCKTAIL LIST//
-function renderCocktailDiv(foundIngre){
+function findCocktailsWithIngre(foundObj) {
+  fetch(baseURL + ingredients + foundObj.id)
+    .then(resp => resp.json())
+    .then(renderCocktailDiv)
+}
+
+function renderCocktailDiv(foundObj){
+  const cocktailList = document.querySelector('#all-cocktails')
+  for (cocktail of foundObj.cocktails) {
+    cocktailList.insertAdjacentHTML('afterbegin', `
+    <button type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    `)
+  }
 
 
 }
