@@ -85,7 +85,6 @@ function renderCocktailDiv(foundObj){
   }
 
   function renderCocktailDetail(cocktail) {
-    console.log(cocktail)
     const ingreArray = []
     const measurmentArray = []
     let ingreMeasureHTML = ''
@@ -103,7 +102,6 @@ function renderCocktailDiv(foundObj){
       `
     }
     const cocktailDetail = document.querySelector('#cocktail-detail')
-    const cocktailTitleId = cocktailDetail.querySelector('#cocktail-title')
     cocktailDetail.innerHTML = ''
     cocktailDetail.innerHTML = `
     <img style="max-width:50%;" src="${cocktail.thumbnail}">
@@ -117,8 +115,4 @@ function renderCocktailDiv(foundObj){
     
 
   }
-
-  //FUNCTIONS DEALING WITH COCKTAIL SHOW PAGE//
-  
-
 }
