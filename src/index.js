@@ -28,7 +28,8 @@ ingreInput.addEventListener('change', e => {
   const found = findIngre(e.target.value)
   renderIngreToList(found)
   ingreInput.value = ""
-  renderCocktailDiv(found)
+  console.dir(found)
+  // renderCocktailDiv(found)
 })
 
 
@@ -52,4 +53,8 @@ searchDiv.addEventListener('click', e => {
 })
 //-------------------------------------------------------//
 
+//FUNCTIONS DEALING WITH COCKTAIL LIST//
+function renderCocktailDiv(foundIngre){
 
+
+}
