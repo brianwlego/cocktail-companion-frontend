@@ -1,10 +1,10 @@
-#page-container{
+#page-container, #ingre-cocktails {
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
-#main-search{
+.main-divs{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,4 +87,34 @@
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+#cocktail-btn {
+  background-color: lightblue;
+  padding: 15px 40px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+
+}
+
+#cocktail-btn:hover {
+  background-color: lightcyan;
+  color: black;
+}
+
+#ingre-cocktails {
+  display: none;
+  flex-direction: column;
+
+}
+
+#cocktail-detail{
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+#edit-auto{
+  display: flex;
 }

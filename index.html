@@ -16,32 +16,40 @@
       <div id="ingredient-list-div">
         <ul id="ingredient-list"></ul>
       </div>
-      <input list='ingredients-dropdown' name='ingredient' id='ingredient' placeholder="Add ingredient...">
-      <datalist id='ingredients-dropdown'>
-      </datalist><br>
+
+      <div class="autocomplete">
+        <input id="main-ing-search" type="text" name="ingredient" placeholder="Ingredient">
+      </div>
+
       <button id="new-cocktail">Create New Cocktail</button>
     </div> 
     <!-- END SEARCH DIV -->
 
+    <!-- all ingredients  -->
+    <div id='ingre-cocktails' class="main-divs">
+    </div>
+    <div id='cocktail-detail' class="main-divs">
+    </div>
+    
     <!-- START FORM MODAL DIV -->
     <div id="form-div-container" class="modal">
       <div class="modal-content">
         <button class="close" type="button" onclick="closeModal()">&times;</button>
         <form id="form" autocomplete="off" action="/action_page.php">
-          <h3>Create New Cocktail</h3><br>
-          <label for="name">Cocktail Name</label><br>
+          <h3>Create New Cocktail</h3><br><br>
           <input type="Text" name="name" placeholder="Name..."><br>
-          <div class="autocomplete" style="width:300px;">
-            <input id="ingredients-form" type="text" name="ingredient" placeholder="Ingredient">
+          <div id="edit-auto" class="autocomplete" style="width:300px;">
+            <input id="measurement" type="text" name="measurement" placeholder="Amount">
+            <input id="ingredients-input" type="text" name="ingredient" placeholder="Ingredient">
           </div>
-          <label for="instructions">Instructions</label><br>
-          <input type="text-field" name="instructions" placeholder="Instructions..."><br>
+          <div id="ingre-list-placeholder"></div>
+          <br><input type="text-field" name="instructions" placeholder="Instructions..."><br>
           <input type="submit" value="Create New Cocktail">
         </form>
       </div>
     </div>
-    <!-- START FORM MODEL DIV -->
-  </div>
-  <!-- END MAIN CONTAINER DIV -->
-</body>
-</html>
+    
+    <!-- END MAIN CONTAINER DIV -->
+    </div>
+  </body>
+  </html>
