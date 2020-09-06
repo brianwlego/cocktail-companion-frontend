@@ -33,6 +33,7 @@
 .modal-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   background-color: #edeaeadb;
   margin: 15% auto; /* 15% from the top and centered */
@@ -40,6 +41,7 @@
   border: 1px solid #888;
   border-radius: 20px;
   width: 40%; /* Could be more or less, depending on screen size */
+  height: fit-content;
 }
 /* The Close Button */
 .close {

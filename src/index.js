@@ -6,6 +6,7 @@ const cocktails = 'cocktails/'
 const ingreInput = document.getElementById('main-ing-search')
 const searchDiv = document.getElementById('main-search')
 const modal = document.getElementById('form-div-container')
+const form = document.getElementById('form')
 const ingInp = document.getElementById('ingredients-input')
 
 const ingredientsArray = []
@@ -39,14 +40,16 @@ function renderIngreToList(ingreObj){
 }
 
 
-searchDiv.addEventListener('click', e => {
+document.addEventListener('click', e => {
   if (e.target.matches('button#ingredient-remove')){
     e.target.parentElement.remove()
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
     const editIngInp = document.getElementById('ingredients-input')
     autocomplete(editIngInp, ingredientsArray)
-  }
+    const array = getCategoryArray(ingredientsArray)
+    createCategoryDatalist(array)
+  } 
     // TODO:
     // remove cocktail results from page of removed ingredient
   
@@ -75,7 +78,6 @@ function autocomplete(ingInp, ingArray){
       let a = document.createElement("div")
       a.id = e.target.id + "autocomplete-list"
       a.classList.add('autocomplete-items')
-      console.dir(e.target.parentNode)
       e.target.parentNode.appendChild(a)
 
     for (const i of ingArray){
@@ -93,7 +95,6 @@ function autocomplete(ingInp, ingArray){
             ingInp.value = ""
           } else if (modal.style.display === "flex"){
             const amt = document.querySelector('input#measurement')
-            console.log(amt)
             addIngreToPageEditForm(found, amt.value)
             ingInp.value = ""
             amt.value = ""
@@ -148,12 +149,76 @@ function autocomplete(ingInp, ingArray){
 function addIngreToPageEditForm(ingObj, amtString){
   const div = document.querySelector('div#ingre-list-placeholder')
   div.insertAdjacentHTML('afterbegin', `
-    <p data-id="${ingObj.id}">${amtString} - ${ingObj.name}</p>
+    <p data-drink-id="${ingObj.id}" data-amt="${amtString}">${amtString} - ${ingObj.name} <button id="ingredient-remove">x</button></p>
   `)
 }
 
+function getCategoryArray(ingArray){
+  let catArray = []
+  for(const i of ingArray){catArray.push(i.category)}
+  const newSet = new Set(catArray)
+  return catArray = [...newSet]
+}
+function createCategoryDatalist(catArray){
+  const datalist = document.querySelector('datalist#categorys')
+  for (const cat of catArray){
+    if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
+  }
+}
+function createNewMeasurements(measurementArray){
+  const measObjArray = []
+  for (const mEle of measurementArray){
+    measObjArray.push({amount: mEle.dataset.amt, ingredient_id: mEle.dataset.drinkId})
+  }
+  return measObjArray
+}
+
+function fetchPostNewCocktail(cocktailObj){
+  configObj = {
+    method: 'POST', 
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
+    body: JSON.stringify(cocktailObj)
+  }
+  return fetch(baseURL+cocktails, configObj)
+  .then(resp => resp.json())
+}
+
+function fetchPostNewMeasurements(cocktailPromise, measArray){
+  cocktailPromise.then(cocktail => {
+    for (const meas of measArray){
+      meas.cocktail_id = cocktail.id
+      meas.ingredient_id = parseInt(meas.ingredient_id)
+      configObj = {
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
+        body: JSON.stringify(meas)
+      }
+      console.log(meas)
+      fetch(baseURL+'measurements', configObj)
+      .then(resp => resp.json())
+      .then(console.dir)
+    }
+    renderCocktailDetail(cocktail)
+    modal.style.display = "none"
+  })
+}
 
 
+form.addEventListener('submit', e => {
+  e.preventDefault()
+  const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
+  const newCocktail = {
+    name: e.target.name.value, 
+    category: e.target.category.value, 
+    glass: e.target.glass.value, 
+    alcoholic: e.target.alcoholic.checked, 
+    instructions: e.target.instructions.value, 
+    thumbnail: e.target.thumbnail.value
+  }
+  const createdCocktail = fetchPostNewCocktail(newCocktail)
+  const measArray = createNewMeasurements(measurementUls)
+  fetchPostNewMeasurements(createdCocktail, measArray)
+})
 
 
 //----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
@@ -215,7 +280,5 @@ function renderCocktailDiv(foundObj){
     <p>${cocktail.glass}</p>
     <p>${cocktail.instructions}
     `
-    
-
   }
 }

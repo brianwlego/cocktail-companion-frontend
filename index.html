@@ -38,12 +38,20 @@
         <form id="form" autocomplete="off" action="/action_page.php">
           <h3>Create New Cocktail</h3><br><br>
           <input type="Text" name="name" placeholder="Name..."><br>
-          <div id="edit-auto" class="autocomplete" style="width:300px;">
-            <input id="measurement" type="text" name="measurement" placeholder="Amount">
-            <input id="ingredients-input" type="text" name="ingredient" placeholder="Ingredient">
+          <div id="ingredient-measurement-wrapper">
+            <div id="edit-auto" class="autocomplete" style="width:300px;">
+              <input id="measurement" type="text" name="measurement" placeholder="Amount">
+              <input id="ingredients-input" type="text" name="ingredient" placeholder="Ingredient">
+            </div>
+            <div id="ingre-list-placeholder"></div>
           </div>
-          <div id="ingre-list-placeholder"></div>
-          <br><input type="text-field" name="instructions" placeholder="Instructions..."><br>
+          <br><input type="text" name="glass" placeholder="Glass..."><br>
+          <br><input id="cat-list" list="categorys" name="category" placeholder="Category..."><br>
+            <datalist id="categorys"></datalist>
+          <br><label for="alcoholic">Alcoholic</label>
+          <br><input type="checkbox" name="alcoholic"><br>
+          <br><input type="text" name="thumbnail" placeholder="Image url..."><br>
+          <br><textarea name="instructions" placeholder="Instructions..."></textarea><br>
           <input type="submit" value="Create New Cocktail">
         </form>
       </div>
