@@ -112,7 +112,5 @@ function renderCocktailDiv(foundObj){
     <p>${cocktail.glass}</p>
     <p>${cocktail.instructions}
     `
-    
-
   }
 }
