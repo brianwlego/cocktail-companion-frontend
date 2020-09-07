@@ -31,7 +31,7 @@ function findIngre(ingreName){
 }
 function renderIngreToList(ingreObj){
   const list = document.getElementById('ingredient-list')
-  list.insertAdjacentHTML('afterbegin', `
+  list.insertAdjacentHTML('beforeend', `
   <li data-id="${ingreObj.id}">
   ${ingreObj.name}
   <button id="ingredient-remove">x</button>
@@ -42,21 +42,20 @@ function renderIngreToList(ingreObj){
 
 
 document.addEventListener('click', e => {
+  //REMOVE ING FROM LIST & REMOVE ASSOCIATED COCKTAILS FROM COCKTAIL LIST//
   if (e.target.matches('button#ingredient-remove')){
     const name = e.target.parentElement.innerText.split(' x')
     const found = findIngre(name[0])
     findIngFromDB(found)
     e.target.parentElement.remove()
+    // TO POP UP NEW COCKTAIL FORM//
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
     const editIngInp = document.getElementById('ingredients-input')
     autocomplete(editIngInp, ingredientsArray)
     const array = getCategoryArray(ingredientsArray)
     createCategoryDatalist(array)
-  } 
-    // TODO:
-    // remove cocktail results from page of removed ingredient
-  
+  }  
 })
 
 //------------------- MODAL FUNCTIONALITY -------------------//
@@ -153,7 +152,7 @@ function autocomplete(ingInp, ingArray){
   })
 }
 
-//------------------EDIT FORM FUNCTIONALITY--------------------//
+//------------------FORM FUNCTIONALITY--------------------//
 function addIngreToPageEditForm(ingObj, amtString){
   const div = document.querySelector('div#ingre-list-placeholder')
   div.insertAdjacentHTML('afterbegin', `
@@ -234,7 +233,7 @@ function findIngFromDB(ingObj){
 function ingArrayHander(ingObj){
   let names = ingArray.map(e=>e.name)
   if (names.includes(ingObj.name)){
-    const found = ingArray.indexOf(ingObj)
+    const found = ingArray.findIndex(e=>e.name === ingObj.name)
     ingArray.splice(found, 1)
     renderCocktailDiv(ingArray)
   } else {
@@ -243,20 +242,59 @@ function ingArrayHander(ingObj){
   }
 }
 
+function getDuplicateArrayElements(arr){
+  let newArray = arr.map(e => e.name)
+  let sorted_arr = newArray.slice().sort();
+  let results = [];
+  for (let i = 0; i < sorted_arr.length - 1; i++) {
+      if (sorted_arr[i + (ingArray.length-1)] === sorted_arr[i]) {
+          results.push(sorted_arr[i]);
+      }
+    }
+    const foundIndex = []
+    for (const name of results){
+      foundIndex.push(newArray.findIndex(e => e === name))
+    }
+    let finalResult = []
+    for (const index of foundIndex){
+      finalResult.push(arr[parseInt(index, 10)])
+    }
+    
+  return finalResult;
+}
+
+
+
+
+
 function renderCocktailDiv(ingArray){
   const cocktailList = document.querySelector('#ingre-cocktails')
   cocktailList.style.display = "none"
   cocktailList.innerHTML = ""
   if (ingArray.length > 0){
-  cocktailList.style.display = "flex"
-  }
+    cocktailList.style.display = "flex"
+    }
+
+  let renderCocktails = []
   for (const ing of ingArray){
     for (const cocktail of ing.cocktails) {
-      cocktailList.insertAdjacentHTML('afterbegin', `
-      <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
-      `)
+      renderCocktails.push(cocktail)
     }
   }
+  if (ingArray.length === 1){
+    for (const cocktail of renderCocktails)
+    cocktailList.insertAdjacentHTML('afterbegin', `
+    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    `)
+  } else {
+    const cocktailsNew = getDuplicateArrayElements(renderCocktails)
+    for (const cocktail of cocktailsNew)
+    cocktailList.insertAdjacentHTML('afterbegin', `
+    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    `)
+  }
+
+
   cocktailList.addEventListener('click', e => {
     const click = e.target
     if (click.matches('#cocktail-btn')) {
