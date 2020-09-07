@@ -8,24 +8,48 @@
   <script defer src="src/index.js"></script>
 </head>
 <body>
+  <!-- START MAIN CONTAINER DIV -->
   <div id='page-container'>
-    <div id='main-search'>
+    <!-- START SEARCH DIV --> 
+    <div id='main-search' class="main-divs"> 
       <h3>Cocktail Companion</h3>
       <div id="ingredient-list-div">
         <ul id="ingredient-list"></ul>
       </div>
-      <!-- <form id="ingredient-form"> -->
-        <input list='ingredients-dropdown' name='ingredient' id='ingredient' placeholder="Add ingredient...">
-        <datalist id='ingredients-dropdown'>
-        </datalist>
-      <!-- </form> -->
-    </div>
+
+      <div class="autocomplete">
+        <input id="main-ing-search" type="text" name="ingredient" placeholder="Ingredient">
+      </div>
+
+      <button id="new-cocktail">Create New Cocktail</button>
+    </div> 
+    <!-- END SEARCH DIV -->
+
     <!-- all ingredients  -->
+    <div id='ingre-cocktails' class="main-divs">
+    </div>
+    <div id='cocktail-detail' class="main-divs">
+    </div>
     
-  </div>
-  <div id='ingre-cocktails' >
-  </div>
-  <div id='cocktail-detail'>
-  </div>
-</body>
-</html>
+    <!-- START FORM MODAL DIV -->
+    <div id="form-div-container" class="modal">
+      <div class="modal-content">
+        <button class="close" type="button" onclick="closeModal()">&times;</button>
+        <form id="form" autocomplete="off" action="/action_page.php">
+          <h3>Create New Cocktail</h3><br><br>
+          <input type="Text" name="name" placeholder="Name..."><br>
+          <div id="edit-auto" class="autocomplete" style="width:300px;">
+            <input id="measurement" type="text" name="measurement" placeholder="Amount">
+            <input id="ingredients-input" type="text" name="ingredient" placeholder="Ingredient">
+          </div>
+          <div id="ingre-list-placeholder"></div>
+          <br><input type="text-field" name="instructions" placeholder="Instructions..."><br>
+          <input type="submit" value="Create New Cocktail">
+        </form>
+      </div>
+    </div>
+    
+    <!-- END MAIN CONTAINER DIV -->
+    </div>
+  </body>
+  </html>

@@ -3,34 +3,24 @@ const baseURL = 'http://localhost:3000/'
 const ingredients = 'ingredients/'
 const cocktails = 'cocktails/'
 
-const ingreInput = document.querySelector('input#ingredient')
+const ingreInput = document.getElementById('main-ing-search')
 const searchDiv = document.getElementById('main-search')
+const modal = document.getElementById('form-div-container')
+const ingInp = document.getElementById('ingredients-input')
 
 const ingredientsArray = []
 
 
 fetch(baseURL + ingredients)
   .then(resp => resp.json())
-  .then(fillInDropdown)
+  .then(result => {
+    autocomplete(ingreInput, result)
+    for (const i of result) {
+      ingredientsArray.push(i)
+    }
+  })
   
 
-function fillInDropdown(array) {
-  const ingreDD = document.querySelector('#ingredients-dropdown')
-  for (const i of array) {
-    ingredientsArray.push(i)
-    ingreDD.insertAdjacentHTML('afterbegin', `
-      <option value='${i.name}'>
-    `)
-  }
-}
-
-ingreInput.addEventListener('change', e => {
-  const found = findIngre(e.target.value)
-  renderIngreToList(found)
-  ingreInput.value = ""
-  // console.dir(found)
-  // renderCocktailDiv(found)
-})
 
 
 //FUNCTIONS FOR ADDING/DELETING INGREDIENTS FROM SEARCH//
@@ -47,16 +37,126 @@ function renderIngreToList(ingreObj){
   `)
   findCocktailsWithIngre(ingreObj)
 }
+
+
 searchDiv.addEventListener('click', e => {
   if (e.target.matches('button#ingredient-remove')){
     e.target.parentElement.remove()
+  } else if (e.target.matches('button#new-cocktail')){
+    modal.style.display = "flex"
+    const editIngInp = document.getElementById('ingredients-input')
+    autocomplete(editIngInp, ingredientsArray)
+  }
     // TODO:
     // remove cocktail results from page of removed ingredient
-  } 
+  
 })
-//-------------------------------------------------------//
 
-//FUNCTIONS DEALING WITH COCKTAIL LIST//
+//------------------- MODAL FUNCTIONALITY -------------------//
+function closeModal(){
+  modal.style.display = "none"
+}
+window.onclick = e => {
+  if (e.target == modal){
+    modal.style.display = "none"
+  }
+}
+
+// ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
+
+function autocomplete(ingInp, ingArray){
+  let currentFocus
+  ingInp.addEventListener("input", e => {
+      let val = e.target.value    
+      closeAllLists()
+      if (!val) { return false}
+      currentFocus = -1
+
+      let a = document.createElement("div")
+      a.id = e.target.id + "autocomplete-list"
+      a.classList.add('autocomplete-items')
+      console.dir(e.target.parentNode)
+      e.target.parentNode.appendChild(a)
+
+    for (const i of ingArray){
+      if (i.name.substr(0, val.length).toUpperCase() == val.toUpperCase()){
+        let b = document.createElement('div')
+        b.innerHTML = `
+        <strong>${i.name.substr(0, val.length)}</strong>${i.name.substr(val.length)}
+        <input type='hidden' value="${i.name}">
+        `
+        b.addEventListener('click', e => {
+          const name = e.target.getElementsByTagName('input')[0].value
+          const found = findIngre(name)
+          if (!modal.style.display) {
+            renderIngreToList(found)
+            ingInp.value = ""
+          } else if (modal.style.display === "flex"){
+            const amt = document.querySelector('input#measurement')
+            console.log(amt)
+            addIngreToPageEditForm(found, amt.value)
+            ingInp.value = ""
+            amt.value = ""
+          }
+          closeAllLists();
+        });
+        a.appendChild(b);
+      }
+    }
+  });
+
+  ingInp.addEventListener('keydown', e => {
+    let x = document.getElementById(e.target.id + "autocomplete-list")
+    if (x) x = x.getElementsByTagName('div')
+    if (e.keyCode == 40){
+      currentFocus++
+      addActive(x)
+    } else if (e.keyCode == 38){
+      currentFocus--
+      addActive(x)
+    } else if (e.keyCode = 13){
+      if (currentFocus > -1 && x ) x[currentFocus].click() 
+    }
+  })
+
+  function addActive(x) {
+    if (!x) return false
+    removeActive(x)
+    if (currentFocus >= x.length) currentFocus = 0
+    if (currentFocus < 0) currentFocus = (x.length - 1)
+    x[currentFocus].classList.add("autocomplete-active")
+  }
+  function removeActive(x){
+    for (const i of x){
+      i.classList.remove("autocomplete-active")
+    }
+  }
+  function closeAllLists(elmnt) {
+    const array = document.getElementsByClassName("autocomplete-items")
+    for (const i of array){
+      if (elmnt != i && elmnt != ingInp){
+        i.parentNode.removeChild(i)
+      }
+    }
+  }
+  document.addEventListener("click", e => {
+    closeAllLists(e.target)
+  })
+}
+
+//------------------EDIT FORM FUNCTIONALITY--------------------//
+function addIngreToPageEditForm(ingObj, amtString){
+  const div = document.querySelector('div#ingre-list-placeholder')
+  div.insertAdjacentHTML('afterbegin', `
+    <p data-id="${ingObj.id}">${amtString} - ${ingObj.name}</p>
+  `)
+}
+
+
+
+
+
+//----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
 function findCocktailsWithIngre(ingreObj) {
   fetch(baseURL + ingredients + ingreObj.id)
     .then(resp => resp.json())
@@ -65,6 +165,7 @@ function findCocktailsWithIngre(ingreObj) {
 
 function renderCocktailDiv(foundObj){
   const cocktailList = document.querySelector('#ingre-cocktails')
+  cocktailList.style.display = "flex"
   for (cocktail of foundObj.cocktails) {
     cocktailList.insertAdjacentHTML('afterbegin', `
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
@@ -85,6 +186,7 @@ function renderCocktailDiv(foundObj){
   }
 
   function renderCocktailDetail(cocktail) {
+
     const ingreArray = []
     const measurmentArray = []
     let ingreMeasureHTML = ''
@@ -102,6 +204,7 @@ function renderCocktailDiv(foundObj){
       `
     }
     const cocktailDetail = document.querySelector('#cocktail-detail')
+    cocktailDetail.style.display = "flex"
     cocktailDetail.innerHTML = ''
     cocktailDetail.innerHTML = `
     <img style="max-width:50%;" src="${cocktail.thumbnail}">
