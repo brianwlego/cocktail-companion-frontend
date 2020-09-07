@@ -10,6 +10,7 @@ const form = document.getElementById('form')
 const ingInp = document.getElementById('ingredients-input')
 
 const ingredientsArray = []
+const ingArray = []
 
 
 fetch(baseURL + ingredients)
@@ -36,12 +37,16 @@ function renderIngreToList(ingreObj){
   <button id="ingredient-remove">x</button>
   </li>
   `)
-  findCocktailsWithIngre(ingreObj)
+  // findCocktailsWithIngre(ingreObj)
 }
 
 
 document.addEventListener('click', e => {
   if (e.target.matches('button#ingredient-remove')){
+    console.dir(e.target)
+    const name = e.target.parentElement.innerText.split(' x')
+    const found = findIngre(name[0])
+    findIngFromDB(found)
     e.target.parentElement.remove()
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
@@ -92,6 +97,7 @@ function autocomplete(ingInp, ingArray){
         b.addEventListener('click', e => {
           const name = e.target.getElementsByTagName('input')[0].value
           const found = findIngre(name)
+          findIngFromDB(found)
           if (!modal.style.display || modal.style.display === "none") {
             cocktailDetail.style.display = "none"
             renderIngreToList(found)
@@ -187,51 +193,77 @@ function fetchPostNewCocktail(cocktailObj){
   fetch(baseURL+cocktails, configObj)
   .then(resp => resp.json())
   .then(result => {
-    if (result.id){
+    if (result){
       renderCocktailDetail(result)
       modal.style.display = "none"
     }
   })
 }
 
+if (modal.querySelectorAll('div').length > 4 ){
+  form.removeEventListener('submit', {})
+} else {
+  form.addEventListener('submit', e => {
+    e.preventDefault()
 
-form.addEventListener('submit', e => {
-  e.preventDefault()
+    const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
+    const measArrayNewObjs = createNewMeasurements(measurementUls)
+    const newCocktail = {
+      name: e.target.name.value, 
+      category: e.target.category.value, 
+      glass: e.target.glass.value, 
+      alcoholic: e.target.alcoholic.checked, 
+      instructions: e.target.instructions.value, 
+      thumbnail: e.target.thumbnail.value, 
+      measurements_attributes: measArrayNewObjs
+    }
+    fetchPostNewCocktail(newCocktail)
+    autocomplete(ingreInput, ingredientsArray)
 
-  const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
-  const measArrayNewObjs = createNewMeasurements(measurementUls)
-  const newCocktail = {
-    name: e.target.name.value, 
-    category: e.target.category.value, 
-    glass: e.target.glass.value, 
-    alcoholic: e.target.alcoholic.checked, 
-    instructions: e.target.instructions.value, 
-    thumbnail: e.target.thumbnail.value, 
-    measurements_attributes: measArrayNewObjs
-  }
-  fetchPostNewCocktail(newCocktail)
-  autocomplete(ingreInput, ingredientsArray)
-
-})
-
-
-//----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
-
-function findCocktailsWithIngre(ingreObj) {
-  fetch(baseURL + ingredients + ingreObj.id)
-    .then(resp => resp.json())
-    .then(renderCocktailDiv)
+  })
 }
 
-function renderCocktailDiv(foundObj){
+//----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
+function findIngFromDB(ingObj){
+  fetch(baseURL + ingredients + ingObj.id)
+    .then(resp => resp.json())
+    .then(result => {
+      ingArrayHander(result)
+      console.dir(result)
+      console.dir(ingArray)
+    })
+}
+
+function ingArrayHander(ingObj){
+  if (!ingArray.find(e=>{e === ingObj})){
+    ingArray.push(ingObj)
+    renderCocktailDiv(ingArray)
+  } else {
+    const found = ingArray.indexOf(ingObj)
+    ingArray.splice(found, 1)
+    renderCocktailDiv(ingArray)
+  }
+}
+
+
+
+// function findCocktailsWithIngre(ingreObj) {
+//   fetch(baseURL + ingredients + ingreObj.id)
+//     .then(resp => resp.json())
+//     .then(renderCocktailDiv)
+// }
+
+function renderCocktailDiv(ingArray){
+  
   const cocktailList = document.querySelector('#ingre-cocktails')
   cocktailList.style.display = "flex"
-  for (cocktail of foundObj.cocktails) {
-    cocktailList.insertAdjacentHTML('afterbegin', `
-    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
-    `)
+  for (const ing of ingArray){
+    for (const cocktail of ing.cocktails) {
+      cocktailList.insertAdjacentHTML('afterbegin', `
+      <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+      `)
+    }
   }
-
   cocktailList.addEventListener('click', e => {
     const click = e.target
     if (click.matches('#cocktail-btn')) {
@@ -281,3 +313,31 @@ function renderCocktailDetail(cocktail) {
   <p>${cocktail.instructions}
   `
 }
+
+
+
+
+//click within auto complete that add's ing to ul
+//find Ing obj
+//put the Ing Obj's name to the ul
+//push the Ing Obj into Rendered Ing's Cocktail Array
+
+//click remove from the ul
+//find the Ing obj thats being removed(based off id)
+//remove the Ing's Obj from the Ing Array
+
+// addEventListener("click", e => {
+//   const name = e.target.getElementsByTagName('input')[0].value
+//   findIngObjFromDb(name)
+// })
+
+
+
+// function renderCoctailDiv(ingArray){
+//   for (const ing of ingArray){
+//     for (const cocktail of ing.cocktails){
+//       //render the the cocktail to the Div
+//     }
+//   }
+
+// }
