@@ -45,8 +45,8 @@
 }
 /* The Close Button */
 .close {
-  position: fixed;
-  margin-left: 18%;
+  position: relative;
+  margin-left: 90%;
   color: #aaa;
   float: right;
   font-size: 28px;

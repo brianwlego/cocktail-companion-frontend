@@ -58,10 +58,12 @@ document.addEventListener('click', e => {
 //------------------- MODAL FUNCTIONALITY -------------------//
 function closeModal(){
   modal.style.display = "none"
+  autocomplete(ingreInput, ingredientsArray)
 }
 window.onclick = e => {
   if (e.target == modal){
     modal.style.display = "none"
+    autocomplete(ingreInput, ingredientsArray)
   }
 }
 
@@ -90,7 +92,8 @@ function autocomplete(ingInp, ingArray){
         b.addEventListener('click', e => {
           const name = e.target.getElementsByTagName('input')[0].value
           const found = findIngre(name)
-          if (!modal.style.display) {
+          if (!modal.style.display || modal.style.display === "none") {
+            cocktailDetail.style.display = "none"
             renderIngreToList(found)
             ingInp.value = ""
           } else if (modal.style.display === "flex"){
@@ -165,6 +168,8 @@ function createCategoryDatalist(catArray){
     if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
   }
 }
+
+
 function createNewMeasurements(measurementArray){
   const measObjArray = []
   for (const mEle of measurementArray){
@@ -179,49 +184,39 @@ function fetchPostNewCocktail(cocktailObj){
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
     body: JSON.stringify(cocktailObj)
   }
-  return fetch(baseURL+cocktails, configObj)
+  fetch(baseURL+cocktails, configObj)
   .then(resp => resp.json())
-}
-
-function fetchPostNewMeasurements(cocktailPromise, measArray){
-  cocktailPromise.then(cocktail => {
-    for (const meas of measArray){
-      meas.cocktail_id = cocktail.id
-      meas.ingredient_id = parseInt(meas.ingredient_id)
-      configObj = {
-        method: 'POST', 
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
-        body: JSON.stringify(meas)
-      }
-      console.log(meas)
-      fetch(baseURL+'measurements', configObj)
-      .then(resp => resp.json())
-      .then(console.dir)
+  .then(result => {
+    if (result.id){
+      renderCocktailDetail(result)
+      modal.style.display = "none"
     }
-    renderCocktailDetail(cocktail)
-    modal.style.display = "none"
   })
 }
 
 
 form.addEventListener('submit', e => {
   e.preventDefault()
+
   const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
+  const measArrayNewObjs = createNewMeasurements(measurementUls)
   const newCocktail = {
     name: e.target.name.value, 
     category: e.target.category.value, 
     glass: e.target.glass.value, 
     alcoholic: e.target.alcoholic.checked, 
     instructions: e.target.instructions.value, 
-    thumbnail: e.target.thumbnail.value
+    thumbnail: e.target.thumbnail.value, 
+    measurements_attributes: measArrayNewObjs
   }
-  const createdCocktail = fetchPostNewCocktail(newCocktail)
-  const measArray = createNewMeasurements(measurementUls)
-  fetchPostNewMeasurements(createdCocktail, measArray)
+  fetchPostNewCocktail(newCocktail)
+  autocomplete(ingreInput, ingredientsArray)
+
 })
 
 
 //----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
+
 function findCocktailsWithIngre(ingreObj) {
   fetch(baseURL + ingredients + ingreObj.id)
     .then(resp => resp.json())
@@ -249,36 +244,40 @@ function renderCocktailDiv(foundObj){
       .then(resp => resp.json())
       .then(renderCocktailDetail)
   }
+}
 
-  function renderCocktailDetail(cocktail) {
 
-    const ingreArray = []
-    const measurmentArray = []
-    let ingreMeasureHTML = ''
-    for (ingredient of cocktail.ingredients) {
-      ingreArray.push(ingredient.name)
-    }
 
-    for (measurment of cocktail.measurements) {
-      measurmentArray.push(measurment.amount)
-    }
+const cocktailDetail = document.querySelector('#cocktail-detail')
 
-    for (let i = 0; i < ingreArray.length; i++){
-      ingreMeasureHTML += ` 
-      <li>${measurmentArray[i]} ${ingreArray[i]}</li> 
-      `
-    }
-    const cocktailDetail = document.querySelector('#cocktail-detail')
-    cocktailDetail.style.display = "flex"
-    cocktailDetail.innerHTML = ''
-    cocktailDetail.innerHTML = `
-    <img style="max-width:50%;" src="${cocktail.thumbnail}">
-    <h3 id="cocktail-title">${cocktail.name}</h4>
-    <ul>
-    ${ingreMeasureHTML}
-    </ul
-    <p>${cocktail.glass}</p>
-    <p>${cocktail.instructions}
+function renderCocktailDetail(cocktail) {
+
+  const ingreArray = []
+  const measurmentArray = []
+  let ingreMeasureHTML = ''
+  for (ingredient of cocktail.ingredients) {
+    ingreArray.push(ingredient.name)
+  }
+
+  for (measurment of cocktail.measurements) {
+    measurmentArray.push(measurment.amount)
+  }
+
+  for (let i = 0; i < ingreArray.length; i++){
+    ingreMeasureHTML += ` 
+    <li>${measurmentArray[i]} ${ingreArray[i]}</li> 
     `
   }
+  
+  cocktailDetail.style.display = "flex"
+  cocktailDetail.innerHTML = ''
+  cocktailDetail.innerHTML = `
+  <img style="max-width:50%;" src="${cocktail.thumbnail}">
+  <h3 id="cocktail-title">${cocktail.name}</h4>
+  <ul>
+  ${ingreMeasureHTML}
+  </ul
+  <p>${cocktail.glass}</p>
+  <p>${cocktail.instructions}
+  `
 }
