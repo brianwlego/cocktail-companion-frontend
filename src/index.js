@@ -43,7 +43,6 @@ function renderIngreToList(ingreObj){
 
 document.addEventListener('click', e => {
   if (e.target.matches('button#ingredient-remove')){
-    console.dir(e.target)
     const name = e.target.parentElement.innerText.split(' x')
     const found = findIngre(name[0])
     findIngFromDB(found)
@@ -233,29 +232,24 @@ function findIngFromDB(ingObj){
 }
 
 function ingArrayHander(ingObj){
-  
-  if (!ingArray.find(e=>{e === ingObj})){
-    ingArray.push(ingObj)
-    renderCocktailDiv(ingArray)
-  } else {
+  let names = ingArray.map(e=>e.name)
+  if (names.includes(ingObj.name)){
     const found = ingArray.indexOf(ingObj)
     ingArray.splice(found, 1)
+    renderCocktailDiv(ingArray)
+  } else {
+    ingArray.push(ingObj)
     renderCocktailDiv(ingArray)
   }
 }
 
-
-
-// function findCocktailsWithIngre(ingreObj) {
-//   fetch(baseURL + ingredients + ingreObj.id)
-//     .then(resp => resp.json())
-//     .then(renderCocktailDiv)
-// }
-
 function renderCocktailDiv(ingArray){
-  
   const cocktailList = document.querySelector('#ingre-cocktails')
+  cocktailList.style.display = "none"
+  cocktailList.innerHTML = ""
+  if (ingArray.length > 0){
   cocktailList.style.display = "flex"
+  }
   for (const ing of ingArray){
     for (const cocktail of ing.cocktails) {
       cocktailList.insertAdjacentHTML('afterbegin', `
@@ -331,12 +325,3 @@ function renderCocktailDetail(cocktail) {
 // })
 
 
-
-// function renderCoctailDiv(ingArray){
-//   for (const ing of ingArray){
-//     for (const cocktail of ing.cocktails){
-//       //render the the cocktail to the Div
-//     }
-//   }
-
-// }
