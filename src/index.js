@@ -229,12 +229,11 @@ function findIngFromDB(ingObj){
     .then(resp => resp.json())
     .then(result => {
       ingArrayHander(result)
-      console.dir(result)
-      console.dir(ingArray)
     })
 }
 
 function ingArrayHander(ingObj){
+  
   if (!ingArray.find(e=>{e === ingObj})){
     ingArray.push(ingObj)
     renderCocktailDiv(ingArray)
