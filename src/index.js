@@ -8,7 +8,7 @@ const cockInput = document.getElementById('main-cocktail-search')
 const searchDiv = document.getElementById('main-search')
 const modal = document.getElementById('form-div-container')
 const form = document.getElementById('form')
-const ingInp = document.getElementById('ingredients-input')
+const input = document.getElementById('ingredients-input')
 
 const ingredientsArray = []
 const ingArray = []
@@ -64,8 +64,8 @@ document.addEventListener('click', e => {
     // TO POP UP NEW COCKTAIL FORM//
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
-    const editIngInp = document.getElementById('ingredients-input')
-    autocomplete(editIngInp, ingredientsArray)
+    const editinput = document.getElementById('ingredients-input')
+    autocomplete(editinput, ingredientsArray)
     const array = getCategoryArray(ingredientsArray)
     createCategoryDatalist(array)
   }  
@@ -85,9 +85,9 @@ window.onclick = e => {
 
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
 
-function autocomplete(ingInp, ingArray){
+function autocomplete(input, inputArray){
   let currentFocus
-  ingInp.addEventListener("input", e => {
+  input.addEventListener("input", e => {
       let val = e.target.value    
       closeAllLists()
       if (!val) { return false}
@@ -98,7 +98,7 @@ function autocomplete(ingInp, ingArray){
       a.classList.add('autocomplete-items')
       e.target.parentNode.appendChild(a)
 
-    for (const i of ingArray) {
+    for (const i of inputArray) {
       if (i.name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
         let b = document.createElement('div')
         b.innerHTML = `
@@ -113,18 +113,18 @@ function autocomplete(ingInp, ingArray){
             if (!modal.style.display || modal.style.display === "none") {
               cocktailDetail.style.display = "none"
               renderIngreToList(found)
-              ingInp.value = ""
+              input.value = ""
             } else if (modal.style.display === "flex") {
               const amt = document.querySelector('input#measurement')
               addIngreToPageEditForm(found, amt.value)
-              ingInp.value = ""
+              input.value = ""
               amt.value = ""
             }
             closeAllLists();
           } else if (e.target.parentElement.matches("#main-cocktail-searchautocomplete-list")) {
             const name = e.target.getElementsByTagName('input')[0].value
             fetchCocktailObj(name)
-            ingInp.value = ''
+            input.value = ''
 
           }
         });
@@ -134,7 +134,7 @@ function autocomplete(ingInp, ingArray){
     }
   });
 
-  ingInp.addEventListener('keydown', e => {
+  input.addEventListener('keydown', e => {
     let x = document.getElementById(e.target.id + "autocomplete-list")
     if (x) x = x.getElementsByTagName('div')
     if (e.keyCode == 40){
@@ -163,7 +163,7 @@ function autocomplete(ingInp, ingArray){
   function closeAllLists(elmnt) {
     const array = document.getElementsByClassName("autocomplete-items")
     for (const i of array){
-      if (elmnt != i && elmnt != ingInp){
+      if (elmnt != i && elmnt != input){
         i.parentNode.removeChild(i)
       }
     }
@@ -321,7 +321,6 @@ function renderCocktailDiv(ingArray){
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
-
 
   cocktailList.addEventListener('click', e => {
     const click = e.target
