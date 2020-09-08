@@ -4,6 +4,7 @@ const ingredients = 'ingredients/'
 const cocktails = 'cocktails/'
 
 const ingreInput = document.getElementById('main-ing-search')
+const cockInput = document.getElementById('main-cocktail-search')
 const searchDiv = document.getElementById('main-search')
 const modal = document.getElementById('form-div-container')
 const form = document.getElementById('form')
@@ -11,6 +12,7 @@ const ingInp = document.getElementById('ingredients-input')
 
 const ingredientsArray = []
 const ingArray = []
+const cocktailsArray = []
 
 
 fetch(baseURL + ingredients)
@@ -22,12 +24,23 @@ fetch(baseURL + ingredients)
     }
   })
   
-
+fetch(baseURL + cocktails)
+  .then(resp => resp.json())
+  .then(result => {
+    autocomplete(cockInput, result)
+    for (const i of result) {
+      cocktailsArray.push(i)
+    }
+  })
 
 
 //FUNCTIONS FOR ADDING/DELETING INGREDIENTS FROM SEARCH//
 function findIngre(ingreName){
   return ingredientsArray.find(ingre=>{return ingre.name === ingreName})
+}
+
+function findCocktail(cocktailName) {
+  return cocktailsArray.find(cocktail=>{return cocktail.name == cocktailName})
 }
 function renderIngreToList(ingreObj){
   const list = document.getElementById('ingredient-list')
@@ -85,30 +98,38 @@ function autocomplete(ingInp, ingArray){
       a.classList.add('autocomplete-items')
       e.target.parentNode.appendChild(a)
 
-    for (const i of ingArray){
-      if (i.name.substr(0, val.length).toUpperCase() == val.toUpperCase()){
+    for (const i of ingArray) {
+      if (i.name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
         let b = document.createElement('div')
         b.innerHTML = `
         <strong>${i.name.substr(0, val.length)}</strong>${i.name.substr(val.length)}
         <input type='hidden' value="${i.name}">
         `
         b.addEventListener('click', e => {
-          const name = e.target.getElementsByTagName('input')[0].value
-          const found = findIngre(name)
-          findIngFromDB(found)
-          if (!modal.style.display || modal.style.display === "none") {
-            cocktailDetail.style.display = "none"
-            renderIngreToList(found)
-            ingInp.value = ""
-          } else if (modal.style.display === "flex"){
-            const amt = document.querySelector('input#measurement')
-            addIngreToPageEditForm(found, amt.value)
-            ingInp.value = ""
-            amt.value = ""
+          if (e.target.parentElement.matches('#main-ing-searchautocomplete-list')) {
+            const name = e.target.getElementsByTagName('input')[0].value
+            const found = findIngre(name)
+            findIngFromDB(found)
+            if (!modal.style.display || modal.style.display === "none") {
+              cocktailDetail.style.display = "none"
+              renderIngreToList(found)
+              ingInp.value = ""
+            } else if (modal.style.display === "flex") {
+              const amt = document.querySelector('input#measurement')
+              addIngreToPageEditForm(found, amt.value)
+              ingInp.value = ""
+              amt.value = ""
+            }
+            closeAllLists();
+          } else if (e.target.parentElement.matches("#main-cocktail-searchautocomplete-list")) {
+            const name = e.target.getElementsByTagName('input')[0].value
+            fetchCocktailObj(name)
+            ingInp.value = ''
+
           }
-          closeAllLists();
         });
         a.appendChild(b);
+      
       }
     }
   });
@@ -264,7 +285,14 @@ function getDuplicateArrayElements(arr){
 }
 
 
+// functions for render cocktail detail
 
+function fetchCocktailObj(name) {
+  const foundCocktail = findCocktail(name)
+  fetch(baseURL + cocktails + foundCocktail.id)
+    .then(resp => resp.json())
+    .then(renderCocktailDetail)
+}
 
 
 function renderCocktailDiv(ingArray){
