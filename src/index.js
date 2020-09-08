@@ -405,5 +405,3 @@ function renderCocktailDetail(cocktail) {
 //   const name = e.target.getElementsByTagName('input')[0].value
 //   findIngObjFromDb(name)
 // })
-
-
