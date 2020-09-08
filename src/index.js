@@ -294,6 +294,23 @@ function fetchCocktailObj(name) {
     .then(renderCocktailDetail)
 }
 
+  let renderCocktails = []
+
+//HELPER FOR AUTOCOMPLETE
+let updatedIngArray = []
+function fetchCocktailsAssociations(){
+  for (const cocktail of renderCocktails){
+    fetch(baseURL+cocktails+cocktail.id)
+    .then(resp=>resp.json())
+    .then(result =>{
+      for (const ing of result.ingredients){
+        updatedIngArray.push(ing)
+      }
+    })
+  }
+}
+
+
 
 function renderCocktailDiv(ingArray){
   const cocktailList = document.querySelector('#ingre-cocktails')
@@ -303,7 +320,7 @@ function renderCocktailDiv(ingArray){
     cocktailList.style.display = "flex"
     }
 
-  let renderCocktails = []
+
   for (const ing of ingArray){
     for (const cocktail of ing.cocktails) {
       renderCocktails.push(cocktail)
