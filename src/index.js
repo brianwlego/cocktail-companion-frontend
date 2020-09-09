@@ -9,11 +9,11 @@ const searchDiv = document.getElementById('main-search')
 const modal = document.getElementById('form-div-container')
 const form = document.getElementById('form')
 const input = document.getElementById('ingredients-input')
+const alcList = document.getElementById('alcohol-list')
 
 const ingredientsArray = []
 const ingArray = []
 const cocktailsArray = []
-
 
 fetch(baseURL + ingredients)
   .then(resp => resp.json())
@@ -50,7 +50,6 @@ function renderIngreToList(ingreObj){
   <button id="ingredient-remove">x</button>
   </li>
   `)
-  // findCocktailsWithIngre(ingreObj)
 }
 
 
@@ -125,11 +124,9 @@ function autocomplete(input, inputArray){
             const name = e.target.getElementsByTagName('input')[0].value
             fetchCocktailObj(name)
             input.value = ''
-
           }
         });
         a.appendChild(b);
-      
       }
     }
   });
@@ -311,9 +308,9 @@ function fetchCocktailsAssociations(){
 }
 
 
+const cocktailList = document.querySelector('#ingre-cocktails')
 
 function renderCocktailDiv(ingArray){
-  const cocktailList = document.querySelector('#ingre-cocktails')
   cocktailList.style.display = "none"
   cocktailList.innerHTML = ""
   if (ingArray.length > 0){
@@ -326,9 +323,9 @@ function renderCocktailDiv(ingArray){
       renderCocktails.push(cocktail)
     }
   }
-  if (ingArray.length === 1){
+  if (ingArray.length === 1) {
     for (const cocktail of renderCocktails)
-    cocktailList.insertAdjacentHTML('afterbegin', `
+      cocktailList.insertAdjacentHTML('afterbegin', `
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   } else {
@@ -338,6 +335,8 @@ function renderCocktailDiv(ingArray){
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
+
+}
 
   cocktailList.addEventListener('click', e => {
     const click = e.target
@@ -351,8 +350,6 @@ function renderCocktailDiv(ingArray){
       .then(resp => resp.json())
       .then(renderCocktailDetail)
   }
-}
-
 
 
 const cocktailDetail = document.querySelector('#cocktail-detail')
@@ -388,9 +385,37 @@ function renderCocktailDetail(cocktail) {
   <p>${cocktail.instructions}
   `
 }
+let cocktailByAlcArray = []
+
+function loadAlcoholList() {
+  alcList.addEventListener('click', e => {
+    cocktailByAlcArray.length = 0
+    for (const ingre of ingredientsArray) {
+      if (e.target.id === ingre.category) {
+          cocktailByAlcArray.push(ingre)
+      }
+    }
+
+    cocktailList.style.display = 'flex'
+    cocktailList.innerHTML = ''
+    for (const ingre of cocktailByAlcArray) {
+      for (const cocktail of ingre.cocktails) {
+        cocktailList.insertAdjacentHTML('afterbegin', `
+    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    `)
+      }
+    }
+  })
+}
 
 
+// function renderCocktailsByAlc(cocktailByAlcArray) {
+//   for (cocktial of cocktailByAlcArray) {
+//     renderCocktails
+//   }
+// }
 
+loadAlcoholList()
 
 //click within auto complete that add's ing to ul
 //find Ing obj

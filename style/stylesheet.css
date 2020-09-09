@@ -129,3 +129,7 @@
 #edit-auto{
   display: flex;
 }
+
+#alcohol-list {
+  text-align: center;
+}
