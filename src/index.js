@@ -441,6 +441,12 @@ function renderCocktailDetail(cocktail) {
   <p>${cocktail.instructions}</p>
   <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
+
+  if (cocktail.user_made === true) {
+    cocktailDetail.insertAdjacentHTML('beforeend', `
+    <button id='cocktail-stat'>User Created</button>
+    `)
+  }
 }
 
 //----------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
