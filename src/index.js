@@ -11,6 +11,7 @@ const alcList = document.getElementById('alcohol-list')
 //FORM ELEMENTS
 const modal = document.getElementById('form-div-container')
 const form = document.getElementById('form')
+const detailClose = document.getElementById('detail-close')
 
 //COCKTAIL LIST DIV
 const cocktailList = document.querySelector('#ingre-cocktails')
@@ -114,6 +115,9 @@ window.onclick = e => {
   if (e.target == modal){
     modal.style.display = "none"
     autocomplete(ingreInput, ingredientsArray)
+  } else if (e.target == detailClose) {
+    console.log('success')
+    cocktailDetail.style.display = "none"
   }
 }
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
@@ -397,14 +401,16 @@ function renderCocktailDiv(ingArray){
   }
   if (ingArray.length === 1) {
     for (const cocktail of renderCocktails)
-    cocktailList.insertAdjacentHTML('beforeend', `
-    <button type='cocktail-button' id='cocktail-btn' onclick="loadCocktail(${cocktail.id})">${cocktail.name}</button>
+      cocktailList.insertAdjacentHTML('beforeend', `
+    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
+    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
     for (const cocktail of cocktailsNew)
-    cocktailList.insertAdjacentHTML('beforeend', `
-    <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+      cocktailList.insertAdjacentHTML('beforeend', `
+    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
+    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
 }
@@ -418,6 +424,14 @@ function loadCocktail(cocktailId) {
 }
 
 
+
+function closeDetail(id) {
+  if (id) {
+    cocktailDetail.style.display = "none"
+  } else {
+    cocktailList.style.display = 'none'
+  }
+}
 
 function renderCocktailDetail(cocktail) {
   cocktailDetail.innerHTML = ''
@@ -433,6 +447,7 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.style.display = "flex"
   
   cocktailDetail.innerHTML = `
+  <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
   <ul>
@@ -482,6 +497,9 @@ alcList.addEventListener('click', e => {
         `)
       }
     }
+    cocktailList.insertAdjacentHTML('afterbegin', `
+    <button class="close" type="button" onclick="closeDetail()">×</button>
+    `)
   }
 })
 
