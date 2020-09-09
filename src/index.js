@@ -10,6 +10,7 @@ const modal = document.getElementById('form-div-container')
 const form = document.getElementById('form')
 const input = document.getElementById('ingredients-input')
 const alcList = document.getElementById('alcohol-list')
+const detailClose = document.getElementById('detail-close')
 
 const ingredientsArray = []
 const ingArray = []
@@ -95,6 +96,9 @@ window.onclick = e => {
   if (e.target == modal){
     modal.style.display = "none"
     autocomplete(ingreInput, ingredientsArray)
+  } else if (e.target == detailClose) {
+    console.log('success')
+    cocktailDetail.style.display = "none"
   }
 }
 
@@ -382,13 +386,15 @@ function renderCocktailDiv(ingArray){
   }
   if (ingArray.length === 1) {
     for (const cocktail of renderCocktails)
-    cocktailList.insertAdjacentHTML('beforeend', `
+      cocktailList.insertAdjacentHTML('beforeend', `
+    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
     for (const cocktail of cocktailsNew)
-    cocktailList.insertAdjacentHTML('beforeend', `
+      cocktailList.insertAdjacentHTML('beforeend', `
+    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
@@ -411,6 +417,14 @@ function renderCocktailDiv(ingArray){
 
 const cocktailDetail = document.querySelector('#cocktail-detail')
 
+function closeDetail(id) {
+  if (id) {
+    cocktailDetail.style.display = "none"
+  } else {
+    cocktailList.style.display = 'none'
+  }
+}
+
 function renderCocktailDetail(cocktail) {
 
   let ingreMeasureHTML = ''
@@ -424,71 +438,86 @@ function renderCocktailDetail(cocktail) {
     }
   }
 
-  // for (ingredient of cocktail.ingredients) {
-  //   ingreArray.push(ingredient.name)
-  // }
-  // for (measurment of cocktail.measurements) {
-  //   measurmentArray.push(measurment.amount)
-  // }
-  // for (let i = 0; i < ingreArray.length; i++){
-  //   ingreMeasureHTML += ` 
-  //   <li>${measurmentArray[i]} ${ingreArray[i]}</li> 
-  //   `
-  // }
   
-  cocktailDetail.style.display = "flex"
-  cocktailDetail.innerHTML = ''
-  cocktailDetail.innerHTML = `
-  <img style="max-width:50%;" src="${cocktail.thumbnail}">
-  <h3 id="cocktail-title">${cocktail.name}</h4>
-  <ul>
-    ${ingreMeasureHTML}
-  </ul
-  <p>${cocktail.glass}</p>
-  <p>${cocktail.instructions}
-  <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
-  `
-}
-let cocktailByAlcArray = []
-
-
-  alcList.addEventListener('click', e => {
-    cocktailByAlcArray.length = 0
-    for (const ingre of ingredientsArray) {
-      if (e.target.id === ingre.category) {
-          cocktailByAlcArray.push(ingre)
+  // for (ingredient of cocktail.ingredients) {
+    //   ingreArray.push(ingredient.name)
+    // }
+    // for (measurment of cocktail.measurements) {
+      //   measurmentArray.push(measurment.amount)
+      // }
+      // for (let i = 0; i < ingreArray.length; i++){
+        //   ingreMeasureHTML += ` 
+        //   <li>${measurmentArray[i]} ${ingreArray[i]}</li> 
+        //   `
+        // }
+        
+        cocktailDetail.style.display = "flex"
+        cocktailDetail.innerHTML = ''
+        cocktailDetail.innerHTML = `
+        <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
+        <img style="max-width:50%;" src="${cocktail.thumbnail}">
+        <h3 id="cocktail-title">${cocktail.name}</h4>
+        <ul>
+        ${ingreMeasureHTML}
+        </ul
+        <p>${cocktail.glass}</p>
+        <p>${cocktail.instructions}
+        <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
+        `
       }
-    }
-
-    cocktailList.style.display = 'flex'
-    cocktailList.innerHTML = ''
-    for (const ingre of cocktailByAlcArray) {
-      for (const cocktail of ingre.cocktails) {
+      let cocktailByAlcArray = []
+      
+      
+      alcList.addEventListener('click', e => {
+        const allIcons = document.querySelectorAll('figure.icon')
+        allIcons.forEach(e=>e.style.background = 'white')
+        for (const icon of allIcons) {
+          icon.style.background = '#ffffff'
+        }
+        cocktailByAlcArray.length = 0
+        
+        console.log(e.target.parentElement)
+        for (const ingre of ingredientsArray) {
+          if (e.target.parentElement.id === ingre.category) {
+            cocktailByAlcArray.push(ingre)
+          }
+        }
+        
+        cocktailList.style.display = 'flex'
+        cocktailList.innerHTML = ''
+        cocktailDetail.style.display = 'none'
+        e.target.style.background = '#34dbeb'
+        for (const ingre of cocktailByAlcArray) {
+          for (const cocktail of ingre.cocktails) {
+            cocktailList.insertAdjacentHTML('afterbegin', `
+            <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+            `)
+          }
+        }
         cocktailList.insertAdjacentHTML('afterbegin', `
-    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
-    `)
-      }
-    }
-  })
-
-
-
-// function renderCocktailsByAlc(cocktailByAlcArray) {
-//   for (cocktial of cocktailByAlcArray) {
-//     renderCocktails
-//   }
-// }
-
-//click within auto complete that add's ing to ul
-//find Ing obj
-//put the Ing Obj's name to the ul
-//push the Ing Obj into Rendered Ing's Cocktail Array
-
-//click remove from the ul
-//find the Ing obj thats being removed(based off id)
-//remove the Ing's Obj from the Ing Array
-
-// addEventListener("click", e => {
-//   const name = e.target.getElementsByTagName('input')[0].value
-//   findIngObjFromDb(name)
-// })
+        <button class="close" type="button" onclick="closeDetail()">×</button>
+        `)
+      })
+      
+      
+      
+  
+      // function renderCocktailsByAlc(cocktailByAlcArray) {
+        //   for (cocktial of cocktailByAlcArray) {
+          //     renderCocktails
+          //   }
+          // }
+          
+          //click within auto complete that add's ing to ul
+          //find Ing obj
+          //put the Ing Obj's name to the ul
+          //push the Ing Obj into Rendered Ing's Cocktail Array
+          
+          //click remove from the ul
+          //find the Ing obj thats being removed(based off id)
+          //remove the Ing's Obj from the Ing Array
+          
+          // addEventListener("click", e => {
+            //   const name = e.target.getElementsByTagName('input')[0].value
+            //   findIngObjFromDb(name)
+            // }
