@@ -7,8 +7,10 @@
 #ingre-cocktails{
   display: flex;
   align-items: center;
-  justify-content: space-around;
-
+  /* justify-content: space-around; */
+  height: 800px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 
@@ -16,8 +18,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30%;
-  height: 70%;
+  width: 35%;
+  max-height: 70%;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
@@ -54,8 +56,8 @@
 }
 /* The Close Button */
 .close {
-  position: relative;
-  margin-left: 90%;
+  position: fixed;
+  margin-left: 15.5%;
   color: #aaa;
   float: right;
   font-size: 28px;
@@ -106,7 +108,8 @@
   font-size: 16px;
   border-radius: 8px;
   transition-duration: 0.4s;
-
+  margin: 3px;
+  width: 80%;
 }
 
 .cocktail-btn:hover {
