@@ -2,19 +2,34 @@
 const baseURL = 'http://localhost:3000/'
 const ingredients = 'ingredients/'
 const cocktails = 'cocktails/'
-
+//MAIN SEARCH ELEMENTS
 const ingreInput = document.getElementById('main-ing-search')
 const cockInput = document.getElementById('main-cocktail-search')
 const searchDiv = document.getElementById('main-search')
-const modal = document.getElementById('form-div-container')
-const form = document.getElementById('form')
-const input = document.getElementById('ingredients-input')
 const alcList = document.getElementById('alcohol-list')
 
-const ingredientsArray = []
-const ingArray = []
-const cocktailsArray = []
+//FORM ELEMENTS
+const modal = document.getElementById('form-div-container')
+const form = document.getElementById('form')
 
+//COCKTAIL LIST DIV
+const cocktailList = document.querySelector('#ingre-cocktails')
+
+//COCTAIL SHOW DIV
+const cocktailDetail = document.querySelector('#cocktail-detail')
+
+//CONTAINS ALL INGS W/OUT ASSOCIATION//
+const ingredientsArray = []
+//USER ADDS-REMOVES INGS//
+const ingArray = []
+//CONTAINS ALL COCKTAILS W/ING ASSOCIATION//
+const cocktailsArray = []
+//USED TO RENDER COCKTAIL LIST BY CHOSEN ALCOHOL//
+let cocktailByAlcArray = []
+
+
+
+// ------------ FETCH FOR ALL ING W/OUT ASSOCIATIONS ----------- //
 fetch(baseURL + ingredients)
   .then(resp => resp.json())
   .then(result => {
@@ -24,6 +39,7 @@ fetch(baseURL + ingredients)
     }
   })
   
+// ------------ FETCH FOR ALL COCKTAILS W/ ING ASSOCIATION -------- //
 fetch(baseURL + cocktails)
   .then(resp => resp.json())
   .then(result => {
@@ -34,14 +50,15 @@ fetch(baseURL + cocktails)
   })
 
 
-//FUNCTIONS FOR ADDING/DELETING INGREDIENTS FROM SEARCH//
+// -------------------- QUERY FUNCTIONS -------------------- //
 function findIngre(ingreName){
   return ingredientsArray.find(ingre=>{return ingre.name === ingreName})
 }
-
 function findCocktail(cocktailName) {
   return cocktailsArray.find(cocktail=>{return cocktail.name == cocktailName})
 }
+
+// ----------- FUNCTION TO ADD USER ING TO LIST ------------ //
 function renderIngreToList(ingreObj){
   const list = document.getElementById('ingredient-list')
   list.insertAdjacentHTML('beforeend', `
@@ -52,20 +69,21 @@ function renderIngreToList(ingreObj){
   `)
 }
 
+// ----------------- CLICK LISTENER ----------------------//
 
 document.addEventListener('click', e => {
-  //REMOVE ING FROM LIST & REMOVE ASSOCIATED COCKTAILS FROM COCKTAIL LIST//
+  //REMOVE USER-ING FROM LIST & ASSOCIATED COCKTAILS FROM DIV//
   if (e.target.matches('button#ingredient-remove')){
     const name = e.target.parentElement.innerText.split(' x')
     const found = findIngre(name[0])
     findIngFromDB(found)
     e.target.parentElement.remove()
 
-    //BUTTON TO REMOVE ING FROM NEW/EDIT FORM
+    //REMOVE ING FROM FORM//
   } else if (e.target.matches('button#ingredient-remove-form')){
     e.target.parentElement.remove()
   
-    // TO POP UP NEW COCKTAIL FORM//
+    // NEW COCKTAIL FORM//
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
     const editinput = document.getElementById('ingredients-input')
@@ -74,7 +92,7 @@ document.addEventListener('click', e => {
     createCategoryDatalist(array)
     cocktailForm()
 
-    //EDIT COCKTAIL BUTTON LISTENER
+    //EDIT COCKTAIL FORM //
   } else if (e.target.matches('button#edit-cocktail')){
     modal.style.display = "flex"
     const editinput = document.getElementById('ingredients-input')
@@ -86,7 +104,7 @@ document.addEventListener('click', e => {
   }
 })
 
-//------------------- MODAL FUNCTIONALITY -------------------//
+//------------------- CLOSE MODAL FUNCTIONALITY -------------------//
 function closeModal(){
   modal.style.display = "none"
   autocomplete(ingreInput, ingredientsArray)
@@ -97,7 +115,6 @@ window.onclick = e => {
     autocomplete(ingreInput, ingredientsArray)
   }
 }
-
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
 
 function autocomplete(input, inputArray){
@@ -107,7 +124,6 @@ function autocomplete(input, inputArray){
       closeAllLists()
       if (!val) { return false}
       currentFocus = -1
-
       let a = document.createElement("div")
       a.id = e.target.id + "autocomplete-list"
       a.classList.add('autocomplete-items')
@@ -120,17 +136,18 @@ function autocomplete(input, inputArray){
         <strong>${i.name.substr(0, val.length)}</strong>${i.name.substr(val.length)}
         <input type='hidden' value="${i.name}">
         `
+  // --------- CLICK LISTENER WITHIN AUTOCOMPLETE ---------- //        
         b.addEventListener('click', e => {
+          // MAIN SEARCH ING 
           if (e.target.parentElement.matches('#main-ing-searchautocomplete-list')) {
             const name = e.target.getElementsByTagName('input')[0].value
             const found = findIngre(name)
             findIngFromDB(found)
-            if (!modal.style.display || modal.style.display === "none") {
-              cocktailDetail.style.display = "none"
-              renderIngreToList(found)
-              input.value = ""
-            } 
+            cocktailDetail.style.display = "none"
+            renderIngreToList(found)
+            input.value = ""
             closeAllLists();
+          //FORM SEARCH ING
           } else if (e.target.parentElement.matches('div#ingredients-inputautocomplete-list')){
             const name = e.target.getElementsByTagName('input')[0].value
             const found = findIngre(name)
@@ -139,9 +156,11 @@ function autocomplete(input, inputArray){
               input.value = ""
               amt.value = ""
               closeAllLists();
+          //MAIN SEARCH COCKTAIL
           } else if (e.target.parentElement.matches("#main-cocktail-searchautocomplete-list")) {
             const name = e.target.getElementsByTagName('input')[0].value
-            fetchCocktailObj(name)
+            const found = findCocktail(name)
+            loadCocktail(found.id)
             input.value = ''
             closeAllLists();
           }
@@ -150,7 +169,7 @@ function autocomplete(input, inputArray){
       }
     }
   });
-
+  // -------- LISTENER FOR ARROW KEYS W/AUTOCOMPLETE -------//
   input.addEventListener('keydown', e => {
     let x = document.getElementById(e.target.id + "autocomplete-list")
     if (x) x = x.getElementsByTagName('div')
@@ -164,7 +183,7 @@ function autocomplete(input, inputArray){
       if (currentFocus > -1 && x ) x[currentFocus].click() 
     }
   })
-
+  // ------- HELPER FUNCTIONS FOR AUTOCOMPLETE --------- //
   function addActive(x) {
     if (!x) return false
     removeActive(x)
@@ -195,30 +214,61 @@ function addIngreToPageEditForm(ingObj, amtString){
   const div = document.querySelector('div#ingre-list-placeholder')
   div.insertAdjacentHTML('afterbegin', `
     <p data-drink-id="${ingObj.id}" data-amt="${amtString}">${amtString} - ${ingObj.name} <button id="ingredient-remove-form">x</button></p>
-  `)
-}
-
-function getCategoryArray(ingArray){
-  let catArray = []
-  for(const i of ingArray){catArray.push(i.category)}
-  const newSet = new Set(catArray)
-  return catArray = [...newSet]
-}
-function createCategoryDatalist(catArray){
-  const datalist = document.querySelector('datalist#categorys')
-  for (const cat of catArray){
-    if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
+    `)
   }
-}
-function createNewMeasurements(measurementArray){
-  const measObjArray = []
-  for (const mEle of measurementArray){
-    measObjArray.push({amount: mEle.dataset.amt, ingredient_id: mEle.dataset.drinkId})
+  function getCategoryArray(ingArray){
+    let catArray = []
+    for(const i of ingArray){catArray.push(i.category)}
+    const newSet = new Set(catArray)
+    return catArray = [...newSet]
   }
-  return measObjArray
-}
+  function createCategoryDatalist(catArray){
+    const datalist = document.querySelector('datalist#categorys')
+    for (const cat of catArray){
+      if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
+    }
+  }
+  function createNewMeasurements(measurementArray){
+    const measObjArray = []
+    for (const mEle of measurementArray){
+      measObjArray.push({amount: mEle.dataset.amt, ingredient_id: mEle.dataset.drinkId})
+    }
+    return measObjArray
+  }
+  // ADDS EVENT LISTENER & GRABS ALL VALUES OFF OF FORM
+  function cocktailForm(){
+    if (modal.querySelectorAll('div').length > 4 ){
+      form.removeEventListener('submit', {})
+    } else {
+      form.addEventListener('submit', e => {
+        e.preventDefault()
+        const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
+        const measArrayNewObjs = createNewMeasurements(measurementUls)
+        const newCocktail = {
+          name: e.target.name.value, 
+          category: e.target.category.value, 
+          glass: e.target.glass.value, 
+          alcoholic: e.target.alcoholic.checked, 
+          instructions: e.target.instructions.value, 
+          thumbnail: e.target.thumbnail.value,
+          measurements_attributes: measArrayNewObjs
+        }
+  
+        if (form.dataset.id){
+          newCocktail.id = form.dataset.id
+          fetchPatchCocktail(newCocktail, form.dataset.id)
+        } else {
+          newCocktail.user_made = true
+          fetchPostNewCocktail(newCocktail)
+        }
+        autocomplete(ingreInput, ingredientsArray)
+      })
+    }
+  }
 
-function fetchPostNewCocktail(cocktailObj){
+  // -------------------- FETCH FOR NEW COCKTAIL ---------------------- //
+
+  function fetchPostNewCocktail(cocktailObj){
   configObj = {
     method: 'POST', 
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
@@ -232,35 +282,6 @@ function fetchPostNewCocktail(cocktailObj){
       modal.style.display = "none"
     }
   })
-}
-function cocktailForm(){
-  if (modal.querySelectorAll('div').length > 4 ){
-    form.removeEventListener('submit', {})
-  } else {
-    form.addEventListener('submit', e => {
-      e.preventDefault()
-      const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
-      const measArrayNewObjs = createNewMeasurements(measurementUls)
-      const newCocktail = {
-        name: e.target.name.value, 
-        category: e.target.category.value, 
-        glass: e.target.glass.value, 
-        alcoholic: e.target.alcoholic.checked, 
-        instructions: e.target.instructions.value, 
-        thumbnail: e.target.thumbnail.value,
-        measurements_attributes: measArrayNewObjs
-      }
-
-      if (form.dataset.id){
-        newCocktail.id = form.dataset.id
-        fetchPatchCocktail(newCocktail, form.dataset.id)
-      } else {
-        newCocktail.user_made = true
-        fetchPostNewCocktail(newCocktail)
-      }
-      autocomplete(ingreInput, ingredientsArray)
-    })
-  }
 }
 
 // ------------- EDIT FORM FUNCTIONALITY --------------//
@@ -290,6 +311,8 @@ function populateFormWithCockTailData(cocktailId){
     })
 }
 
+// --------------- FETCH FOR PATCH FORM ------------------ //
+
 function fetchPatchCocktail(cocktailObj, cocktailId){
   console.dir(cocktailObj)
   console.dir(cocktailId)
@@ -309,9 +332,9 @@ function fetchPatchCocktail(cocktailObj, cocktailId){
   })
 }
 
+//-----------------FUNCTIONS DEALING WITH COCKTAIL LIST-----------------//
 
-
-//----------FUNCTIONS DEALING WITH COCKTAIL LIST------------//
+// -- FETCH FOR SINGLE ING -- //
 function findIngFromDB(ingObj){
   fetch(baseURL + ingredients + ingObj.id)
     .then(resp => resp.json())
@@ -320,6 +343,7 @@ function findIngFromDB(ingObj){
     })
 }
 
+// ADDS OR REMOVES ING FROM INGARRAY //
 function ingArrayHander(ingObj){
   let names = ingArray.map(e=>e.name)
   if (names.includes(ingObj.name)){
@@ -332,6 +356,7 @@ function ingArrayHander(ingObj){
   }
 }
 
+// ONLY RETURNS COCKTAILS THAT ARE REPEATED //
 function getDuplicateArrayElements(arr){
   let newArray = arr.map(e => e.name)
   let sorted_arr = newArray.slice().sort();
@@ -352,18 +377,7 @@ function getDuplicateArrayElements(arr){
   return finalResult;
 }
 
-
-// Returns Single Cocktail w/Associations
-
-function fetchCocktailObj(name) {
-  const foundCocktail = findCocktail(name)
-  fetch(baseURL + cocktails + foundCocktail.id)
-    .then(resp => resp.json())
-    .then(renderCocktailDetail)
-}
-
-
-const cocktailList = document.querySelector('#ingre-cocktails')
+// ---------- RENDERS COCKTAILS TO COCKTAIL DIV ------------------- // 
 
 function renderCocktailDiv(ingArray){
   cocktailList.style.display = "none"
@@ -383,38 +397,30 @@ function renderCocktailDiv(ingArray){
   if (ingArray.length === 1) {
     for (const cocktail of renderCocktails)
     cocktailList.insertAdjacentHTML('beforeend', `
-    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    <button type='cocktail-button' id='cocktail-btn' onclick="loadCocktail(${cocktail.id})">${cocktail.name}</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
     for (const cocktail of cocktailsNew)
     cocktailList.insertAdjacentHTML('beforeend', `
-    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+    <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
-
 }
 
-  cocktailList.addEventListener('click', e => {
-    const click = e.target
-    if (click.matches('#cocktail-btn')) {
-      loadCocktail(click.dataset.cocktailId)
-    }
-  })
 
-  function loadCocktail(cocktailId) {
-    fetch(baseURL + cocktails + cocktailId)
-      .then(resp => resp.json())
-      .then(renderCocktailDetail)
-  }
+// ----- FETCH TO GET SINGLE COCKTAIL ----- //
+function loadCocktail(cocktailId) {
+  fetch(baseURL + cocktails + cocktailId)
+    .then(resp => resp.json())
+    .then(renderCocktailDetail)
+}
 
 
-const cocktailDetail = document.querySelector('#cocktail-detail')
 
 function renderCocktailDetail(cocktail) {
-
+  cocktailDetail.innerHTML = ''
   let ingreMeasureHTML = ''
-  
   for (const meas of cocktail.measurements){
     for (const ing of cocktail.ingredients){
       if (meas.ingredient_id == ing.id)
@@ -423,21 +429,8 @@ function renderCocktailDetail(cocktail) {
       `
     }
   }
-
-  // for (ingredient of cocktail.ingredients) {
-  //   ingreArray.push(ingredient.name)
-  // }
-  // for (measurment of cocktail.measurements) {
-  //   measurmentArray.push(measurment.amount)
-  // }
-  // for (let i = 0; i < ingreArray.length; i++){
-  //   ingreMeasureHTML += ` 
-  //   <li>${measurmentArray[i]} ${ingreArray[i]}</li> 
-  //   `
-  // }
-  
   cocktailDetail.style.display = "flex"
-  cocktailDetail.innerHTML = ''
+  
   cocktailDetail.innerHTML = `
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
@@ -445,50 +438,34 @@ function renderCocktailDetail(cocktail) {
     ${ingreMeasureHTML}
   </ul
   <p>${cocktail.glass}</p>
-  <p>${cocktail.instructions}
+  <p>${cocktail.instructions}</p>
   <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 }
-let cocktailByAlcArray = []
+
+//----------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
 
 
-  alcList.addEventListener('click', e => {
-    cocktailByAlcArray.length = 0
-    for (const ingre of ingredientsArray) {
-      if (e.target.id === ingre.category) {
-          cocktailByAlcArray.push(ingre)
-      }
+alcList.addEventListener('click', e => {
+  cocktailByAlcArray.length = 0
+  cocktailList.style.display = 'flex'
+  cocktailList.innerHTML = ''
+  
+  for (const ingre of ingredientsArray) {
+    if (e.target.id === ingre.category) {
+        cocktailByAlcArray.push(ingre)
     }
+  }
 
-    cocktailList.style.display = 'flex'
-    cocktailList.innerHTML = ''
-    for (const ingre of cocktailByAlcArray) {
-      for (const cocktail of ingre.cocktails) {
-        cocktailList.insertAdjacentHTML('afterbegin', `
-    <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
-    `)
-      }
+  for (const ingre of cocktailByAlcArray) {
+    for (const cocktail of ingre.cocktails) {
+      cocktailList.insertAdjacentHTML('afterbegin', `
+        <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+      `)
     }
-  })
+  }
+})
 
 
 
-// function renderCocktailsByAlc(cocktailByAlcArray) {
-//   for (cocktial of cocktailByAlcArray) {
-//     renderCocktails
-//   }
-// }
 
-//click within auto complete that add's ing to ul
-//find Ing obj
-//put the Ing Obj's name to the ul
-//push the Ing Obj into Rendered Ing's Cocktail Array
-
-//click remove from the ul
-//find the Ing obj thats being removed(based off id)
-//remove the Ing's Obj from the Ing Array
-
-// addEventListener("click", e => {
-//   const name = e.target.getElementsByTagName('input')[0].value
-//   findIngObjFromDb(name)
-// })
