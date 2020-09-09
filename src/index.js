@@ -493,7 +493,7 @@ alcList.addEventListener('click', e => {
     for (const ingre of cocktailByAlcArray) {
       for (const cocktail of ingre.cocktails) {
         cocktailList.insertAdjacentHTML('afterbegin', `
-          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn'>${cocktail.name}</button>
+          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="Lets Make It"><div>${cocktail.name}</div></button>
         `)
       }
     }

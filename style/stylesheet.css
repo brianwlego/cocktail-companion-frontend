@@ -1,3 +1,5 @@
+html, body{background: #fafdff;}
+
 #page-container{
   display: flex;
   align-items: center;
@@ -102,20 +104,52 @@
   color: #ffffff;
 }
 
-.cocktail-btn {
+/* .cocktail-btn {
   background-color: lightblue;
   padding: 15px 40px;
   font-size: 16px;
-  border-radius: 8px;
   transition-duration: 0.4s;
   margin: 3px;
   width: 80%;
+} */
+
+button:hover{cursor: pointer}
+button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form){
+  background-color: transparent; outline: none;
+  position: relative;
+  border: 2px solid #111;
+  padding: 15px 50px;
+  width: 60%;
+  margin: 3px;
+  border-radius: 5px;
+  text-align: center;
+  /* overflow: hidden; */
 }
 
-.cocktail-btn:hover {
-  background-color: lightcyan;
-  color: black;
+button:hover:before{opacity: 1; transform: translate(0,0);}
+button:before {
+  content: attr(data-hover);
+  position: absolute;
+  top: 1.1em; left: 0;
+  width: 100%;
+  /* text-transform: uppercase; */
+  letter-spacing: 3px;
+  font-weight: 800;
+  font-size: .8em;
+  opacity: 0;
+  transform: translate(-100%,0);
+  transition: all .3s ease-in-out;
 }
+
+button:hover div{opacity: 0; transform: translate(100%,0)}
+button div{
+  /* text-transform: uppercase; */
+  letter-spacing: 3px;
+  font-weight: 800;
+  font-size: .8em;
+  transition: all .3s ease-in-out;
+}
+
 
 #ingre-cocktails {
   display: none;
