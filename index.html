@@ -38,7 +38,7 @@
       <div class="modal-content">
         <button class="close" type="button" onclick="closeModal()">&times;</button>
         <form id="form" autocomplete="off" action="/action_page.php">
-          <h3>Create New Cocktail</h3><br><br>
+          <h3 id="form-header">Create New Cocktail</h3><br><br>
           <input type="Text" name="name" placeholder="Name..."><br>
           <div id="ingredient-measurement-wrapper">
             <div id="edit-auto" class="autocomplete" style="width:300px;">
@@ -54,7 +54,7 @@
           <br><input type="checkbox" name="alcoholic"><br>
           <br><input type="text" name="thumbnail" placeholder="Image url..."><br>
           <br><textarea name="instructions" placeholder="Instructions..."></textarea><br>
-          <input type="submit" value="Create New Cocktail">
+          <input id="form-submit-btn" type="submit" value="Create New Cocktail">
         </form>
       </div>
     </div>
