@@ -16,14 +16,44 @@
       <div id="ingredient-list-div">
         <ul id="ingredient-list"></ul>
       </div>
-      <div class="autocomplete">
-        <input id="main-ing-search" tye="text" name="ingredient" placeholder="Ingredient">
-      </div>
-      <div id='cocktail-search' class='autocomplete'>
-        <input id="main-cocktail-search" tye="text" name="cocktail" placeholder="Cocktail">
-      </div>
+        <div class="autocomplete">
+          <input id="main-ing-search" tye="text" name="ingredient" placeholder="Ingredient">
+        </div>
+        <div id='cocktail-search' class='autocomplete'>
+          <input id="main-cocktail-search" tye="text" name="cocktail" placeholder="Cocktail">
+        </div>
 
-      <button id="new-cocktail">Create New Cocktail</button>
+        <button id="new-cocktail">Create New Cocktail</button>
+        <div id="alcohol-list">
+          <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/whiskey-Small.png" id="Whiskey">
+          <figcaption>Whiskey</figcaption>
+          </figure>
+          <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/scotch-Small.png" id="Scotch">
+          <figcaption>Scotch</figcaption>
+          </figure>
+          <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/brandy-Small.png" id="Brandy">
+          <figcaption>Brandy</figcaption>
+          </figure>
+          <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/gin-Small.png" id="Gin">
+          <figcaption>Gin</figcaption>
+        </figure>
+        <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/vodka-Small.png" id="Vodka">
+          <figcaption>Vodka</figcaption>
+        </figure>
+        <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/tequila-Small.png" id="Tequila">
+        <figcaption>Tequila</figcaption>
+        </figure>
+        <figure>
+          <img src="https://www.thecocktaildb.com/images/ingredients/rum-Small.png" id="Rum">
+        <figcaption>Rum</figcaption>
+        </figure>
+        </div>
     </div> 
     <!-- END SEARCH DIV -->
 
@@ -38,7 +68,7 @@
       <div class="modal-content">
         <button class="close" type="button" onclick="closeModal()">&times;</button>
         <form id="form" autocomplete="off" action="/action_page.php">
-          <h3>Create New Cocktail</h3><br><br>
+          <h3 id="form-header">Create New Cocktail</h3><br><br>
           <input type="Text" name="name" placeholder="Name..."><br>
           <div id="ingredient-measurement-wrapper">
             <div id="edit-auto" class="autocomplete" style="width:300px;">
@@ -54,7 +84,7 @@
           <br><input type="checkbox" name="alcoholic"><br>
           <br><input type="text" name="thumbnail" placeholder="Image url..."><br>
           <br><textarea name="instructions" placeholder="Instructions..."></textarea><br>
-          <input type="submit" value="Create New Cocktail">
+          <input id="form-submit-btn" type="submit" value="Create New Cocktail">
         </form>
       </div>
     </div>
