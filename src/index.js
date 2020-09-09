@@ -78,6 +78,7 @@ document.addEventListener('click', e => {
     const found = findIngre(name[0])
     findIngFromDB(found)
     e.target.parentElement.remove()
+    cocktailDetail.style.display = 'none'
 
     //REMOVE ING FROM FORM//
   } else if (e.target.matches('button#ingredient-remove-form')){
