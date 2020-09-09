@@ -16,8 +16,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30%;
-  height: 70%;
+  width: 35%;
+  max-height: 70%;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
@@ -133,3 +133,4 @@
 #alcohol-list {
   text-align: center;
 }
+

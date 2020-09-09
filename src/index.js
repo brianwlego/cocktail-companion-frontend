@@ -78,6 +78,7 @@ document.addEventListener('click', e => {
     const found = findIngre(name[0])
     findIngFromDB(found)
     e.target.parentElement.remove()
+    cocktailDetail.style.display = "none"
 
     //REMOVE ING FROM FORM//
   } else if (e.target.matches('button#ingredient-remove-form')){
@@ -377,7 +378,7 @@ function getDuplicateArrayElements(arr){
   return finalResult;
 }
 
-// ---------- RENDERS COCKTAILS TO COCKTAIL DIV ------------------- // 
+// -------------- RENDERS COCKTAILS TO COCKTAIL DIV ------------------- // 
 
 function renderCocktailDiv(ingArray){
   cocktailList.style.display = "none"
@@ -443,25 +444,37 @@ function renderCocktailDetail(cocktail) {
   `
 }
 
-//----------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
+//-------------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
 
 
 alcList.addEventListener('click', e => {
-  cocktailByAlcArray.length = 0
-  cocktailList.style.display = 'flex'
-  cocktailList.innerHTML = ''
-  
-  for (const ingre of ingredientsArray) {
-    if (e.target.id === ingre.category) {
-        cocktailByAlcArray.push(ingre)
-    }
-  }
+  if (e.target.matches('div#alcohol-list')){
 
-  for (const ingre of cocktailByAlcArray) {
-    for (const cocktail of ingre.cocktails) {
-      cocktailList.insertAdjacentHTML('afterbegin', `
-        <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
-      `)
+  } else {
+    const allIcons = document.querySelectorAll('figure.alc-icon')
+    allIcons.forEach(e=> e.style.background = "white")
+
+    cocktailByAlcArray.length = 0
+    cocktailList.style.display = 'flex'
+    cocktailList.innerHTML = ''
+    cocktailDetail.style.display = "none"
+    if (e.target.parentElement.matches('figure')){
+      e.target.parentElement.style.background = "rgba(112, 159, 242, 0.892)"
+    }
+    
+    
+    for (const ingre of ingredientsArray) {
+      if (e.target.parentElement.id === ingre.category) {
+          cocktailByAlcArray.push(ingre)
+      }
+    }
+
+    for (const ingre of cocktailByAlcArray) {
+      for (const cocktail of ingre.cocktails) {
+        cocktailList.insertAdjacentHTML('afterbegin', `
+          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+        `)
+      }
     }
   }
 })
