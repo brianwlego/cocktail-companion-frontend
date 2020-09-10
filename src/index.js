@@ -416,11 +416,11 @@ function renderCocktailDiv(ingArray){
   if (ingArray.length === 1) {
     for (const cocktail of renderCocktails) {
       cocktailList.insertAdjacentHTML('beforeend', `
-      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
     `)
     }
     cocktailList.insertAdjacentHTML('afterbegin', `
-      <button class="close" type="button" onclick="closeDetail()">×</button>
+      <button class="close fade-in" type="button" onclick="closeDetail()">×</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
@@ -465,22 +465,22 @@ function renderCocktailDetail(cocktail) {
     for (const ing of cocktail.ingredients){
       if (meas.ingredient_id == ing.id)
       ingreMeasureHTML += `
-        <li>${meas.amount} ${ing.name}</li>
+        <li id='cocktail-measures'>${meas.amount} ${ing.name}</li>
       `
     }
   }
   cocktailDetail.style.display = "flex"
   
   cocktailDetail.innerHTML = `
-  <button class="close" type="button" onClick="closeDetail(${cocktail.id})">×</button>
-  <img style="max-width:50%;" src="${cocktail.thumbnail}">
-  <h3 id="cocktail-title">${cocktail.name}</h4>
-  <ul>
-    ${ingreMeasureHTML}
-  </ul
-  <p>${cocktail.glass}</p>
-  <p>${cocktail.instructions}</p>
-  <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
+  <button class="close fade-in" type="button" onClick="closeDetail(${cocktail.id})">×</button>
+  <img class='fade-in' id='thumbnail' style="max-width:50%;" src="${cocktail.thumbnail}">
+  <h3 class='fade-in' id="cocktail-title">${cocktail.name}</h4>
+  <ul class='fade-in'>
+  ${ingreMeasureHTML}
+  </ul>
+  <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
+  <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
+  <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 
   if (cocktail.user_made === true) {
@@ -488,6 +488,7 @@ function renderCocktailDetail(cocktail) {
     <button id='cocktail-stat'>User Created</button>
     `)
   }
+  cocktailDetail.classList.add('fade-in')
 }
 
 //-------------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //

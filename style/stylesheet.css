@@ -5,6 +5,7 @@
 
 html, body{
     background: #fafdff;
+    height: 100vh;
 }
 
 #page-container{
@@ -35,7 +36,7 @@ input {
   flex-direction: column;
   align-items: center;
   /* justify-content: space-around; */
-  height: 800px;
+  /* height: 800px; */
   overflow: hidden;
   overflow-y: scroll;
 }
@@ -46,17 +47,19 @@ input {
   letter-spacing: 3px;
   font-size: 32px;
 }
+
 .main-divs{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 35%;
-  height: 75%;
+  /* width: 1fr; */
+  max-width: 25%;
+  min-width: 15%;
+  height: 80%;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
-  overflow-y:auto
-
+  box-shadow: 0px 8px 10px 6px rgb(0, 0, 0, .1);
 }
 
 /* The Modal (background) */
@@ -87,15 +90,21 @@ input {
   width: 40%; /* Could be more or less, depending on screen size */
   height: fit-content;
 }
+
 /* The Close Button */
 .close {
   position: relative;
-  margin-left: 90%;
+  margin-left: 93%;
   color: #aaa;
   float: right;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 32px;
+  /* margin: 8px */
+  /* font-weight: bold; */
+  /* margin: 8px; */
+  background-color: transparent;
+  border: none;
 }
+
 .close:hover,
 .close:focus {
   color: black;
@@ -146,6 +155,7 @@ button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove
   border-radius: 5px;
   text-align: center;
   /* overflow: hidden; */
+  box-shadow: 0px 1px 2px 2px  rgb(0, 0, 0, .1)
 }
 
 button:hover:before{opacity: 1; transform: translate(0,0);}
@@ -157,22 +167,18 @@ button:before {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 600;
-  /* font-size: .8em; */
   opacity: 0;
   transform: translate(-100%,0);
   transition: all .3s ease-in-out;
-  /* background-color: lightgrey; */
+
 }
 
 button:hover div{opacity: 0; transform: translate(100%,0)}
 button div{
-  /* text-transform: uppercase; */
   letter-spacing: 2px;
   font-weight: 600;
-  /* font-size: .8em; */
   transition: all .3s ease-in-out;
 }
-
 
 #ingre-cocktails {
   display: none;
@@ -183,6 +189,8 @@ button div{
   display: none;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
+  /* width: 80%; */
 }
 
 #edit-auto{
@@ -191,6 +199,79 @@ button div{
 
 #alcohol-list {
   text-align: center;
-  max-height: 30rem;
+  /* max-height: 30rem; */
   overflow-y: auto;
 }
+
+#glass-type {
+font-weight: 300;
+}
+
+#cocktail-desc {
+font-weight: 400;
+}
+
+#cocktail-measures {
+  font-weight: 400;
+}
+
+#cocktail-btn {
+  font-weight: 600;
+}
+
+#thumbnail {
+  height: 40%;
+  width: 40%;
+}
+
+.fade-in {
+  animation: fadeIn ease 1s;
+  -webkit-animation: fadeIn ease 1s;
+  -moz-animation: fadeIn ease 1s;
+  -o-animation: fadeIn ease 1s;
+  -ms-animation: fadeIn ease 1s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+}
+
