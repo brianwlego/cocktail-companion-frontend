@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cocktail Companion</title>
   <link rel="stylesheet" href="style/stylesheet.css">
+  <link rel="stylesheet" href="style/form.css">
   <script defer src="src/index.js"></script>
 </head>
 <body>
@@ -68,22 +69,24 @@
       <div class="modal-content">
         <button class="close" type="button" onclick="closeModal()">&times;</button>
         <form id="form" autocomplete="off" action="/action_page.php">
-          <h3 id="form-header">Create New Cocktail</h3><br><br>
-          <input type="Text" name="name" placeholder="Name..."><br>
+          <h3 id="form-header">Create New Cocktail</h3>
+          <input type="text" name="name" placeholder="Name...">
+
+
           <div id="ingredient-measurement-wrapper">
-            <div id="edit-auto" class="autocomplete" style="width:300px;">
-              <input id="measurement" type="text" name="measurement" placeholder="Amount">
+            <input id="measurement" type="text" name="measurement" placeholder="Amount">
+            <div id="edit-auto" class="autocomplete">
               <input id="ingredients-input" type="text" name="ingredient" placeholder="Ingredient">
             </div>
-            <div id="ingre-list-placeholder"></div>
           </div>
-          <br><input type="text" name="glass" placeholder="Glass..."><br>
-          <br><input id="cat-list" list="categorys" name="category" placeholder="Category..."><br>
-            <datalist id="categorys"></datalist>
-          <br><label for="alcoholic">Alcoholic</label>
-          <br><input type="checkbox" name="alcoholic"><br>
-          <br><input type="text" name="thumbnail" placeholder="Image url..."><br>
-          <br><textarea name="instructions" placeholder="Instructions..."></textarea><br>
+
+          <div id="ingre-list-placeholder"></div>
+
+          <input type="text" name="glass" placeholder="Glass...">
+          <input id="cat-list" list="categorys" name="category" placeholder="Category...">
+          <datalist id="categorys"></datalist>       
+          <input type="text" name="thumbnail" placeholder="Image url...">
+          <textarea name="instructions" placeholder="Instructions..."></textarea>
           <input id="form-submit-btn" type="submit" value="Create New Cocktail">
         </form>
       </div>

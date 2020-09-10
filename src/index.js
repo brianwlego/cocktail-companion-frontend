@@ -253,7 +253,6 @@ function addIngreToPageEditForm(ingObj, amtString){
           name: e.target.name.value, 
           category: e.target.category.value, 
           glass: e.target.glass.value, 
-          alcoholic: e.target.alcoholic.checked, 
           instructions: e.target.instructions.value, 
           thumbnail: e.target.thumbnail.value,
           measurements_attributes: measArrayNewObjs
@@ -301,7 +300,6 @@ function populateFormWithCockTailData(cocktailId){
       form.name.value = result.name
       form.category.value = result.category
       form.glass.value = result.glass
-      form.alcoholic.checked = result.alcoholic
       form.instructions.value = result.instructions
       form.thumbnail.value = result.thumbnail
       div.innerHTML = ""
@@ -402,14 +400,12 @@ function renderCocktailDiv(ingArray){
   if (ingArray.length === 1) {
     for (const cocktail of renderCocktails)
       cocktailList.insertAdjacentHTML('beforeend', `
-    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
     for (const cocktail of cocktailsNew)
       cocktailList.insertAdjacentHTML('beforeend', `
-    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
     <button data-cocktail-id=${cocktail.id} type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
     `)
   }
@@ -447,7 +443,6 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.style.display = "flex"
   
   cocktailDetail.innerHTML = `
-  <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
   <ul>
