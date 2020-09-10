@@ -25,9 +25,10 @@ button#new-cocktail {
 }
 input {
   display: block;
-  width: 92%;
-  margin: 5px;
+  width: 100%;
+  margin: 5px 0;
   padding: 5px;
+  box-sizing: border-box;
 }
 
 #ingre-cocktails{
@@ -144,8 +145,8 @@ input {
 }
 
 button:hover{cursor: pointer}
-button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove) {
-  background-color: #ebf5ff; outline: none;
+button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove):not(#form-submit-btn){
+  background-color: transparent; outline: none;
   position: relative;
   border: 2px solid grey;
   padding: 15px 50px;
