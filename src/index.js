@@ -94,6 +94,8 @@ document.addEventListener('click', e => {
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
     const editinput = document.getElementById('ingredients-input')
+    document.querySelector('button#form-submit-btn').innerText = "Create New Cocktail"
+    document.querySelector('h3#form-header').innerText = "Create New Cocktail"
     autocomplete(editinput, ingredientsArray)
     const array = getCategoryArray(ingredientsArray)
     createCategoryDatalist(array)
