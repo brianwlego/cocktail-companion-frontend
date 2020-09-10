@@ -145,7 +145,7 @@ button:before {
   opacity: 0;
   transform: translate(-100%,0);
   transition: all .3s ease-in-out;
-  background-color: #ebf5ff;
+  /* background-color: #ebf5ff; */
   /* background-color: lightgrey; */
 }
 
