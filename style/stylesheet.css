@@ -11,6 +11,7 @@ html, body{
   display: flex;
   align-items: center;
   justify-content: space-around;
+  height: 100%;
 }
 
 div.autocomplete{
@@ -23,9 +24,10 @@ button#new-cocktail {
 }
 input {
   display: block;
-  width: 92%;
-  margin: 5px;
+  width: 100%;
+  margin: 5px 0;
   padding: 5px;
+  box-sizing: border-box;
 }
 
 #ingre-cocktails{
@@ -49,7 +51,7 @@ input {
   flex-direction: column;
   align-items: center;
   width: 35%;
-  max-height: 35rem;
+  height: 75%;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
@@ -134,7 +136,7 @@ input {
 }
 
 button:hover{cursor: pointer}
-button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove){
+button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove):not(#form-submit-btn){
   background-color: transparent; outline: none;
   position: relative;
   border: 2px solid grey;
