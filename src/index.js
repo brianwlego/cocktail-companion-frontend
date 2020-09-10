@@ -426,7 +426,7 @@ function renderCocktailDiv(ingArray){
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
     for (const cocktail of cocktailsNew){
       cocktailList.insertAdjacentHTML('beforeend', `
-      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
     `)
     }
     cocktailList.insertAdjacentHTML('afterbegin', `
@@ -519,7 +519,7 @@ alcList.addEventListener('click', e => {
     for (const ingre of cocktailByAlcArray) {
       for (const cocktail of ingre.cocktails) {
         cocktailList.insertAdjacentHTML('afterbegin', `
-          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
         `)
       }
     }
