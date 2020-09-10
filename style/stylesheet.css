@@ -16,11 +16,11 @@ html, body{
 }
 
 div.autocomplete{
-  width: 100%;
+  width: 95%;
 }
 button#new-cocktail {
   margin: 15px;
-  width: 100%;
+  width: 95%;
   padding: 6px;
 }
 input {
@@ -30,13 +30,19 @@ input {
   padding: 5px;
   box-sizing: border-box;
 }
+ul#ingredient-list {
+  list-style-type: none;
+  padding: 0 10px;
+}
+div#ingredient-list-div{
+  width: 90%;
+}
 
 #ingre-cocktails{
   display: none;
   flex-direction: column;
   align-items: center;
   /* justify-content: space-around; */
-  /* height: 800px; */
   overflow: hidden;
   overflow-y: scroll;
 }
@@ -53,8 +59,7 @@ input {
   flex-direction: column;
   align-items: center;
   /* width: 1fr; */
-  max-width: 25%;
-  min-width: 15%;
+  width: 30%;
   height: 80%;
   border: 2px solid grey;
   border-radius: 5px;
@@ -150,7 +155,7 @@ button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove
   position: relative;
   border: 2px solid grey;
   padding: 15px 50px;
-  width: 60%;
+  width: 70%;
   margin: 3px;
   border-radius: 5px;
   text-align: center;
@@ -202,6 +207,15 @@ button div{
   /* max-height: 30rem; */
   overflow-y: auto;
 }
+figure.active {
+  border-radius: 6px;
+  background: rgba(112, 159, 242, 0.892);
+}
+
+p#cocktail-desc{
+  text-align: center;
+}
+
 
 #glass-type {
 font-weight: 300;
@@ -274,4 +288,3 @@ font-weight: 400;
   100% {
     opacity:1;
 }
-
