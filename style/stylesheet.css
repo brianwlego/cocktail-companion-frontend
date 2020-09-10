@@ -13,8 +13,24 @@ html, body{
   justify-content: space-around;
 }
 
+div.autocomplete{
+  width: 100%;
+}
+button#new-cocktail {
+  margin: 15px;
+  width: 100%;
+  padding: 6px;
+}
+input {
+  display: block;
+  width: 92%;
+  margin: 5px;
+  padding: 5px;
+}
+
 #ingre-cocktails{
-  display: flex;
+  display: none;
+  flex-direction: column;
   align-items: center;
   /* justify-content: space-around; */
   height: 800px;
@@ -33,7 +49,7 @@ html, body{
   flex-direction: column;
   align-items: center;
   width: 35%;
-  max-height: 70%;
+  max-height: 35rem;
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
@@ -60,8 +76,8 @@ html, body{
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #edeaeadb;
-  margin: 15% auto; /* 15% from the top and centered */
+  background-color: #edeaeadd;
+  margin: auto;
   padding: 20px;
   border: 1px solid #888;
   border-radius: 20px;
@@ -70,8 +86,8 @@ html, body{
 }
 /* The Close Button */
 .close {
-  position: fixed;
-  margin-left: 15.5%;
+  position: relative;
+  margin-left: 90%;
   color: #aaa;
   float: right;
   font-size: 28px;
@@ -162,7 +178,6 @@ button div{
 #ingre-cocktails {
   display: none;
   flex-direction: column;
-
 }
 
 #cocktail-detail{
@@ -177,6 +192,8 @@ button div{
 
 #alcohol-list {
   text-align: center;
+  max-height: 30rem;
+  overflow-y: auto;
 }
 
 #glass-type {
