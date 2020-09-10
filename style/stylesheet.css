@@ -37,7 +37,7 @@ html, body{
   border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
-
+  box-shadow: 0px 10px 12px 6px #e6e6e6;
 }
 
 /* The Modal (background) */
@@ -75,7 +75,9 @@ html, body{
   color: #aaa;
   float: right;
   font-size: 28px;
-  font-weight: bold;
+  /* margin: 8px */
+  /* font-weight: bold; */
+  border: none;
 }
 .close:hover,
 .close:focus {
@@ -173,4 +175,16 @@ button div{
 
 #alcohol-list {
   text-align: center;
+}
+
+#glass-type {
+font-weight: 300;
+}
+
+#cocktail-desc {
+font-weight: 400;
+}
+
+#cocktail-measures {
+  font-weight: 400;
 }

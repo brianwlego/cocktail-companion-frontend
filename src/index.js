@@ -440,7 +440,7 @@ function renderCocktailDetail(cocktail) {
     for (const ing of cocktail.ingredients){
       if (meas.ingredient_id == ing.id)
       ingreMeasureHTML += `
-        <li>${meas.amount} ${ing.name}</li>
+        <li id='cocktail-measures'>${meas.amount} ${ing.name}</li>
       `
     }
   }
@@ -451,10 +451,10 @@ function renderCocktailDetail(cocktail) {
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
   <ul>
-    ${ingreMeasureHTML}
-  </ul
-  <p>${cocktail.glass}</p>
-  <p>${cocktail.instructions}</p>
+  ${ingreMeasureHTML}
+  </ul>
+  <p id='glass-type'>${cocktail.glass}</p>
+  <p id='cocktail-desc'>${cocktail.instructions}</p>
   <button id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 
