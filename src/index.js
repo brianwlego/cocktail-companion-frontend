@@ -440,7 +440,7 @@ function closeDetail(id) {
     cocktailList.style.display = 'none'
     list.innerHTML = ""
     ingArray.length = 0
-    
+
   }
 }
 
