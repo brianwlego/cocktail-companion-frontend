@@ -473,7 +473,7 @@ function renderCocktailDetail(cocktail) {
     for (const ing of cocktail.ingredients){
       if (meas.ingredient_id == ing.id)
       ingreMeasureHTML += `
-        <li id='cocktail-measures'>${meas.amount} ${ing.name}</li>
+        <li id='cocktail-measures'>${meas.amount} <span style='font-weight: bold;'>${ing.name}</span></li>
       `
     }
   }
@@ -483,11 +483,15 @@ function renderCocktailDetail(cocktail) {
   <button class="close fade-in" type="button" onClick="closeDetail(${cocktail.id})">×</button>
   <img class='fade-in' id='thumbnail' style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 class='fade-in' id="cocktail-title">${cocktail.name}</h4>
-  <ul class='fade-in'>
-  ${ingreMeasureHTML}
-  </ul>
-  <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
-  <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
+  <div class="ing-and-ins">
+
+    <ul class='fade-in'>
+      ${ingreMeasureHTML}
+      <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
+    </ul>
+    <h4 class='c-titles'>Instructions</h4>
+    <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
+  </div>
   <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 
@@ -499,6 +503,8 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.classList.add('fade-in')
 }
 
+{/* <h4 class='c-titles'>Ingredients</h4>
+<h4 class='c-titles'>Instructions</h4> */}
 //-------------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
 
 

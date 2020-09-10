@@ -1,11 +1,11 @@
-* {
+*:not(.cocktail-measures){
   font-family: 'Raleway', sans-serif;
   font-weight: 500;
 }
 
 html, body{
-    background: #fafdff;
-    height: 100vh;
+  background: #d3ecfd;
+  height: 100vh;
 }
 
 #page-container{
@@ -18,11 +18,7 @@ html, body{
 div.autocomplete{
   width: 95%;
 }
-button#new-cocktail {
-  margin: 15px;
-  width: 95%;
-  padding: 6px;
-}
+
 input {
   display: block;
   width: 100%;
@@ -42,12 +38,11 @@ div#ingredient-list-div{
   display: none;
   flex-direction: column;
   align-items: center;
-  /* justify-content: space-around; */
   overflow: hidden;
   overflow-y: scroll;
 }
 
-#main-title, #cocktail-title {
+#main-title, #cocktail-title, #form-header, .c-titles {
   font-family: 'Oswald', sans-serif;
   font-weight: 400;
   letter-spacing: 3px;
@@ -64,6 +59,7 @@ div#ingredient-list-div{
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0px 8px 10px 6px rgb(0, 0, 0, .1);
+  background-color: whitesmoke;
 }
 
 /* The Modal (background) */
@@ -77,7 +73,7 @@ div#ingredient-list-div{
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
@@ -86,10 +82,10 @@ div#ingredient-list-div{
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #edeaeadd;
+  background-color: whitesmoke;
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 2px solid #888;
   border-radius: 20px;
   width: 40%; /* Could be more or less, depending on screen size */
   height: fit-content;
@@ -150,7 +146,7 @@ div#ingredient-list-div{
 
 button:hover{cursor: pointer}
 button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove):not(#form-submit-btn){
-  background-color: transparent; outline: none;
+  background-color: #e4f4ff; outline: none;
   position: relative;
   border: 2px solid grey;
   padding: 15px 50px;
@@ -184,6 +180,22 @@ button div{
   transition: all .3s ease-in-out;
 }
 
+button#new-cocktail, 
+button#form-submit-btn,
+button#edit-cocktail {
+  margin: 15px;
+  width: 95%;
+  padding: 10px;
+  background-color: #e4f4ff;
+  border-radius: 8px;
+  border: 2px solid grey;
+  box-shadow: 0px 1px 2px 2px  rgb(0, 0, 0, .1);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+button#edit-cocktail{
+  width: auto;
+}
 #ingre-cocktails {
   display: none;
   flex-direction: column;
@@ -194,7 +206,6 @@ button div{
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
-  /* width: 80%; */
 }
 
 #edit-auto{
@@ -210,25 +221,45 @@ button div{
 }
 figure.active {
   border-radius: 6px;
-  background: rgba(112, 159, 242, 0.892);
+  background: #d0e9fad0;
+}
+
+#form-header {
+  font-size: 28px;
+}
+
+.caption-text {
+  font-size: 14px;
+}
+
+.c-titles {
+  font-size: 20px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  text-align: center;
+}
+
+span {
+  font-weight: bold;
+}
+#cocktail-measures {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#glass-type {
+  font-size: 16px;
+  font-weight: 300;
 }
 
 p#cocktail-desc{
   text-align: center;
 }
 
-
-#glass-type {
-font-weight: 300;
-}
-
 #cocktail-desc {
-font-weight: 400;
-padding: 20px;
-}
-
-#cocktail-measures {
-  font-weight: 400;
+font-weight: 500;
+font-size: 16px;
+margin: 0;
 }
 
 #cocktail-btn {
@@ -239,6 +270,22 @@ padding: 20px;
 #thumbnail {
   max-width: 40%;
   height: auto;
+  border-radius: 8px;
+}
+
+.alc-icon:hover {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); } 
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); } 
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
 .fade-in {
@@ -290,4 +337,5 @@ padding: 20px;
   }
   100% {
     opacity:1;
+  }
 }
