@@ -447,7 +447,7 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.style.display = "flex"
   
   cocktailDetail.innerHTML = `
-   <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
+  <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
   <ul>
