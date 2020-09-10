@@ -8,6 +8,9 @@ const list = document.getElementById('ingredient-list')
 const cockInput = document.getElementById('main-cocktail-search')
 const searchDiv = document.getElementById('main-search')
 const alcList = document.getElementById('alcohol-list')
+//FIGURE ICONS
+const allIcons = document.querySelectorAll('figure.alc-icon')
+
 
 //FORM ELEMENTS
 const modal = document.getElementById('form-div-container')
@@ -63,10 +66,12 @@ function findCocktail(cocktailName) {
 // ----------- FUNCTION TO ADD USER ING TO LIST ------------ //
 function renderIngreToList(ingreObj){
   list.insertAdjacentHTML('beforeend', `
-  <li data-id="${ingreObj.id}">
-  ${ingreObj.name}
-  <button id="ingredient-remove">x</button>
-  </li>
+  
+    <div data-id="${ingreObj.id}" class="ing-form-div" style="margin: 5px 0;">
+      ${ingreObj.name}
+      <button id="ingredient-remove" data-name="${ingreObj.name}">x</button>
+    </div>
+
   `)
 }
 
@@ -75,8 +80,9 @@ function renderIngreToList(ingreObj){
 document.addEventListener('click', e => {
   //REMOVE USER-ING FROM LIST & ASSOCIATED COCKTAILS FROM DIV//
   if (e.target.matches('button#ingredient-remove')){
-    const name = e.target.parentElement.innerText.split(' x')
-    const found = findIngre(name[0])
+    const name = e.target.dataset.name
+    const found = findIngre(name)
+    ingListDataIds = ingListDataIds.filter(e => e != found.id)
     findIngFromDB(found)
     e.target.parentElement.remove()
     cocktailDetail.style.display = "none"
@@ -110,14 +116,13 @@ document.addEventListener('click', e => {
 function closeModal(){
   modal.style.display = "none"
   autocomplete(ingreInput, ingredientsArray)
+  formDiv[0].dataset.id = ""
+  formDiv[1].value = "", formDiv[4].value = "", formDiv[5].value = "", formDiv[7].value = "", formDiv[8].value = ""
+  formIngDiv.innerHTML = ""
 }
 window.onclick = e => {
-  if (e.target == modal){
-    modal.style.display = "none"
-    autocomplete(ingreInput, ingredientsArray)
-  } else if (e.target == detailClose) {
-    console.log('success')
-    cocktailDetail.style.display = "none"
+  if (e.target == modal || e.target == detailClose){
+    closeModal()
   }
 }
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
@@ -125,7 +130,8 @@ window.onclick = e => {
 function autocomplete(input, inputArray){
   let currentFocus
   input.addEventListener("input", e => {
-      let val = e.target.value    
+    allIcons.forEach( e => e.classList.remove('active'))  
+    let val = e.target.value    
       closeAllLists()
       if (!val) { return false}
       currentFocus = -1
@@ -435,11 +441,13 @@ function closeDetail(id) {
   //CLOSE COCKTAIL DETAILS
   if (id) {
     cocktailDetail.style.display = "none"
+
   //CLOSE COCKTAIL LIST
   } else {
     cocktailList.style.display = 'none'
     list.innerHTML = ""
     ingArray.length = 0
+    allIcons.forEach( e => e.classList.remove('active'))
 
   }
 }
@@ -484,15 +492,13 @@ alcList.addEventListener('click', e => {
   if (e.target.matches('div#alcohol-list')){
 
   } else {
-    const allIcons = document.querySelectorAll('figure.alc-icon')
-    allIcons.forEach(e=> e.style.background = "transparent")
-
     cocktailByAlcArray.length = 0
     cocktailList.style.display = 'flex'
     cocktailList.innerHTML = ''
     cocktailDetail.style.display = "none"
     if (e.target.parentElement.matches('figure')){
-      e.target.parentElement.style.background = "rgba(112, 159, 242, 0.892)"
+      allIcons.forEach( e => e.classList.remove('active'))
+      e.target.parentElement.classList.add('active')
     }
     
     
