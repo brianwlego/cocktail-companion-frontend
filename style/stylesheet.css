@@ -4,7 +4,7 @@
 }
 
 html, body{
-    background: #fafdff;
+    background: #dcf1ff7a;
     height: 100vh;
 }
 
@@ -18,10 +18,20 @@ html, body{
 div.autocomplete{
   width: 100%;
 }
-button#new-cocktail {
+button#new-cocktail, button#edit-cocktail{
   margin: 15px;
   width: 100%;
   padding: 6px;
+  background: transparent;
+  border-radius: 5px;
+}
+
+button#edit-cocktail {
+  width: auto;
+  background-color: rgba(255, 30, 0, 0.301);
+}
+button#edit-cocktail:hover {
+  
 }
 input {
   display: block;
@@ -60,6 +70,7 @@ input {
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0px 8px 10px 6px rgb(0, 0, 0, .1);
+  background-color: #f5fbffd5;
 }
 
 /* The Modal (background) */
@@ -146,7 +157,7 @@ input {
 
 button:hover{cursor: pointer}
 button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove):not(#form-submit-btn){
-  background-color: transparent; outline: none;
+  background-color: #dcf1ff69; outline: none;
   position: relative;
   border: 2px solid grey;
   padding: 15px 50px;
@@ -193,13 +204,19 @@ button div{
   /* width: 80%; */
 }
 
+.cocktail-instruc {
+  display: flex;
+  flex-direction: column;
+
+}
+
 #edit-auto{
   display: flex;
 }
 
 #alcohol-list {
   display: flex;
-  align-content: center;
+  /* align-content: center; */
   justify-content: center;
   text-align: center;
   flex-wrap: wrap;
@@ -215,6 +232,7 @@ font-weight: 300;
 #cocktail-desc {
 font-weight: 400;
 padding: 20px;
+flex-wrap: wrap;
 }
 
 #cocktail-measures {
@@ -223,12 +241,14 @@ padding: 20px;
 
 #cocktail-btn {
   font-weight: 600;
-  color: #c5e2ed;
+  /* background-color: #0595ce; */
 }
 
 #thumbnail {
   max-width: 40%;
   height: auto;
+  border: grey;
+  border-radius: 8px;
 }
 
 .fade-in {
@@ -280,4 +300,5 @@ padding: 20px;
   }
   100% {
     opacity:1;
+  }
 }
