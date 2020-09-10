@@ -4,6 +4,7 @@ const ingredients = 'ingredients/'
 const cocktails = 'cocktails/'
 //MAIN SEARCH ELEMENTS
 const ingreInput = document.getElementById('main-ing-search')
+const list = document.getElementById('ingredient-list')
 const cockInput = document.getElementById('main-cocktail-search')
 const searchDiv = document.getElementById('main-search')
 const alcList = document.getElementById('alcohol-list')
@@ -61,7 +62,6 @@ function findCocktail(cocktailName) {
 
 // ----------- FUNCTION TO ADD USER ING TO LIST ------------ //
 function renderIngreToList(ingreObj){
-  const list = document.getElementById('ingredient-list')
   list.insertAdjacentHTML('beforeend', `
   <li data-id="${ingreObj.id}">
   ${ingreObj.name}
@@ -263,6 +263,7 @@ function addIngreToPageEditForm(ingObj, amtString){
           fetchPatchCocktail(newCocktail, form.dataset.id)
         } else {
           newCocktail.user_made = true
+          console.dir(newCocktail)
           fetchPostNewCocktail(newCocktail)
         }
         autocomplete(ingreInput, ingredientsArray)
@@ -282,6 +283,7 @@ function addIngreToPageEditForm(ingObj, amtString){
   .then(resp => resp.json())
   .then(result => {
     if (result){
+      cocktailsArray.push(result)
       renderCocktailDetail(result)
       modal.style.display = "none"
     }
@@ -398,17 +400,23 @@ function renderCocktailDiv(ingArray){
     }
   }
   if (ingArray.length === 1) {
-    for (const cocktail of renderCocktails)
+    for (const cocktail of renderCocktails) {
       cocktailList.insertAdjacentHTML('beforeend', `
-    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
-    <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+    `)
+    }
+    cocktailList.insertAdjacentHTML('afterbegin', `
+      <button class="close" type="button" onclick="closeDetail()">×</button>
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
-    for (const cocktail of cocktailsNew)
+    for (const cocktail of cocktailsNew){
       cocktailList.insertAdjacentHTML('beforeend', `
-    <button class="close" type="button" onclick="closeDetail(${cocktail.id})">×</button>
-    <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' id='cocktail-btn'>${cocktail.name}</button>
+      <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+    `)
+    }
+    cocktailList.insertAdjacentHTML('afterbegin', `
+      <button class="close" type="button" onclick="closeDetail()">×</button>
     `)
   }
 }
@@ -421,13 +429,18 @@ function loadCocktail(cocktailId) {
     .then(renderCocktailDetail)
 }
 
-
+//-------- CLOSE DIV'S FROM BUTTON -------//
 
 function closeDetail(id) {
+  //CLOSE COCKTAIL DETAILS
   if (id) {
     cocktailDetail.style.display = "none"
+  //CLOSE COCKTAIL LIST
   } else {
     cocktailList.style.display = 'none'
+    list.innerHTML = ""
+    ingArray.length = 0
+    
   }
 }
 
@@ -445,6 +458,7 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.style.display = "flex"
   
   cocktailDetail.innerHTML = `
+  <button class="close" type="button" onClick="closeDetail(${cocktail.id})">×</button>
   <img style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 id="cocktail-title">${cocktail.name}</h4>
   <ul>

@@ -87,8 +87,8 @@ input {
 }
 /* The Close Button */
 .close {
-  position: fixed;
-  margin-left: 15.5%;
+  position: relative;
+  margin-left: 90%;
   color: #aaa;
   float: right;
   font-size: 20px;
