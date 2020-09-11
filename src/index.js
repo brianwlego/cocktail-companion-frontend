@@ -27,7 +27,7 @@ const cocktailDetail = document.querySelector('#cocktail-detail')
 //CONTAINS ALL INGS W/OUT ASSOCIATION//
 const ingredientsArray = []
 //USER ADDS-REMOVES INGS//
-const ingArray = []
+let ingArray = []
 //CONTAINS ALL COCKTAILS W/ING ASSOCIATION//
 const cocktailsArray = []
 //USED TO RENDER COCKTAIL LIST BY CHOSEN ALCOHOL//
@@ -467,6 +467,7 @@ function closeDetail(id) {
     cocktailList.style.display = 'none'
     list.innerHTML = ""
     ingArray.length = 0
+    ingListDataIds.length = 0
     allIcons.forEach( e => e.classList.remove('active'))
 
   }
