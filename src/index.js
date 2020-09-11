@@ -496,7 +496,6 @@ function renderCocktailDetail(cocktail) {
   </div>
   <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
   <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
-  
   <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 
@@ -508,6 +507,8 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.classList.add('fade-in')
 }
 
+{/* <h4 class='c-titles'>Ingredients</h4>
+<h4 class='c-titles'>Instructions</h4> */}
 //-------------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
 
 
