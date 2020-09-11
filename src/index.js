@@ -133,6 +133,7 @@ window.onclick = e => {
   if (e.target == detailClose){
     closeModal()
     delete modal.dataset.inuse
+    delete modal.dataset.edit
   } else if (e.target == modal) {
     if (modal.dataset.edit) {
       closeModal()
@@ -141,6 +142,7 @@ window.onclick = e => {
     } else {
       modal.style.display = "none"
       delete modal.dataset.inuse
+      delete modal.dataset.edit
     }
   }
 }
