@@ -122,6 +122,7 @@ document.addEventListener('click', e => {
 function closeModal(){
   modal.style.display = "none"
   autocomplete(ingreInput, ingredientsArray)
+  autocomplete(cockInput, cocktailsArray)
   formDiv[0].dataset.id = ""
   formDiv[1].value = "", formDiv[4].value = "", formDiv[5].value = "", formDiv[7].value = "", formDiv[8].value = ""
   formIngDiv.innerHTML = ""
@@ -302,7 +303,7 @@ function addIngreToPageEditForm(ingObj, amtString){
     if (result.id){
       cocktailsArray.push(result)
       renderCocktailDetail(result)
-      modal.style.display = "none"
+      closeModal()
     } else {
       modal.style.display = "none"
     }
@@ -352,7 +353,7 @@ function fetchPatchCocktail(cocktailObj, cocktailId){
     console.dir(result)
     if (result){
       renderCocktailDetail(result)
-      modal.style.display = "none"
+      closeModal()
     }
   })
 }
@@ -405,21 +406,25 @@ function getDuplicateArrayElements(arr){
 // -------------- RENDERS COCKTAILS TO COCKTAIL DIV ------------------- // 
 
 function renderCocktailDiv(ingArray){
+  let renderCocktails = []
+
   cocktailList.style.display = "none"
   cocktailList.innerHTML = ""
   if (ingArray.length > 0){
     cocktailList.style.display = "flex"
   }
 
-  let renderCocktails = []
-  
   
   for (const ing of ingArray){
     for (const cocktail of ing.cocktails) {
       renderCocktails.push(cocktail)
     }
   }
+  
+  
+
   if (ingArray.length === 1) {
+    renderCocktails.sort((a, b) => (a.name > b.name) ? 1 : -1)
     for (const cocktail of renderCocktails) {
       cocktailList.insertAdjacentHTML('beforeend', `
       <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
@@ -430,6 +435,7 @@ function renderCocktailDiv(ingArray){
     `)
   } else {
     const cocktailsNew = getDuplicateArrayElements(renderCocktails)
+    cocktailsNew.sort((a, b) => (a.name > b.name) ? 1 : -1)
     for (const cocktail of cocktailsNew){
       cocktailList.insertAdjacentHTML('beforeend', `
       <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
@@ -473,7 +479,9 @@ function renderCocktailDetail(cocktail) {
     for (const ing of cocktail.ingredients){
       if (meas.ingredient_id == ing.id)
       ingreMeasureHTML += `
-        <li id='cocktail-measures'>${meas.amount} ${ing.name}</li>
+      <div id="meas-and-ing-wrapper">
+        <span id="one">${meas.amount}</span><span id="two">${ing.name}</span>
+      </div>
       `
     }
   }
@@ -483,11 +491,12 @@ function renderCocktailDetail(cocktail) {
   <button class="close fade-in" type="button" onClick="closeDetail(${cocktail.id})">×</button>
   <img class='fade-in' id='thumbnail' style="max-width:50%;" src="${cocktail.thumbnail}">
   <h3 class='fade-in' id="cocktail-title">${cocktail.name}</h4>
-  <ul class='fade-in'>
-  ${ingreMeasureHTML}
-  </ul>
-  <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
+  <div class='fade-in' id="detail-list-wrapper">
+    ${ingreMeasureHTML}
+  </div>
   <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
+  <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
+  
   <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 
@@ -514,21 +523,24 @@ alcList.addEventListener('click', e => {
       allIcons.forEach( e => e.classList.remove('active'))
       e.target.parentElement.classList.add('active')
     }
-    
-    
     for (const ingre of ingredientsArray) {
       if (e.target.parentElement.id === ingre.category) {
           cocktailByAlcArray.push(ingre)
       }
     }
-
+    const sortedArray = []
     for (const ingre of cocktailByAlcArray) {
       for (const cocktail of ingre.cocktails) {
-        cocktailList.insertAdjacentHTML('afterbegin', `
-          <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
-        `)
+        sortedArray.push(cocktail)
       }
     }
+    sortedArray.sort((a, b) => (a.name > b.name) ? 1 : -1)
+    for (const cocktail of sortedArray){
+    cocktailList.insertAdjacentHTML('beforeend', `
+        <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
+        `)
+    }
+
     cocktailList.insertAdjacentHTML('afterbegin', `
     <button class="close" type="button" onclick="closeDetail()">×</button>
     `)
