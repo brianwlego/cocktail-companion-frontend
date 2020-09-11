@@ -493,9 +493,9 @@ function renderCocktailDetail(cocktail) {
   <h3 class='fade-in' id="cocktail-title">${cocktail.name}</h4>
   <div class='fade-in' id="detail-list-wrapper">
     ${ingreMeasureHTML}
+    <p class='fade-in' id='glass-type'>Served in a ${cocktail.glass}</p>
   </div>
   <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
-  <p class='fade-in' id='glass-type'>${cocktail.glass}</p>
   <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
 

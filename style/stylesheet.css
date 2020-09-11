@@ -4,7 +4,8 @@
 }
 
 html, body{
-  background: #d3ecfd;
+  background: rgb(81,144,224);
+  background: linear-gradient(295deg, rgba(81,144,224,1) 0%, rgba(91,197,217,1) 100%);
   height: 100vh;
 }
 
@@ -17,6 +18,10 @@ html, body{
 
 div.autocomplete{
   width: 95%;
+}
+
+h3 {
+  text-align: center;
 }
 
 input {
@@ -170,7 +175,7 @@ span#one{
 
 button:hover{cursor: pointer}
 button:not(#new-cocktail):not(.close):not(#edit-cocktail):not(#ingredient-remove-form):not(#ingredient-remove):not(#form-submit-btn){
-  background-color: #e4f4ff; outline: none;
+  background-color: #a0cfee; outline: none;
   position: relative;
   border: 2px solid grey;
   padding: 15px 50px;
@@ -210,13 +215,28 @@ button#edit-cocktail {
   margin: 15px;
   width: 95%;
   padding: 10px;
-  background-color: #e4f4ff;
+  background-color: #a0cfee;
   border-radius: 8px;
   border: 2px solid grey;
   box-shadow: 0px 1px 2px 2px  rgb(0, 0, 0, .1);
   font-weight: 600;
   letter-spacing: 1px;
 }
+
+button#edit-cocktail:hover {
+    background-color: #a5d6fa;
+    cursor: pointer;
+}
+
+button#new-cocktail:hover {
+  background-color: #a5d6fa;
+  cursor: pointer;
+}
+button#form-submit-btn:hover {
+  background-color: #a5d6fa;
+  cursor: pointer;
+}
+
 button#edit-cocktail{
   width: auto;
 }
@@ -273,11 +293,12 @@ span {
 
 #glass-type {
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 p#cocktail-desc{
   text-align: center;
+  margin: 20px 40px;
 }
 
 
@@ -292,10 +313,19 @@ margin: 0;
   color: #c5e2ed;
 }
 
+
 #thumbnail {
   max-width: 40%;
   height: auto;
   border-radius: 8px;
+}
+
+.alc-icon {
+  max-width: 60%;
+}
+
+.alc-icon:hover {
+  cursor: pointer;
 }
 
 .alc-icon:hover {

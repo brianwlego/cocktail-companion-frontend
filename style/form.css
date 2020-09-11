@@ -21,6 +21,7 @@ h3#form-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0px 5px;
 }
 
 textarea {
@@ -32,6 +33,10 @@ textarea {
 
 #ingredient-measurement-wrapper{
   display: flex;
+}
+
+input#measurement {
+  margin-right: 5px;
 }
 
 button#ingredient-remove-form {
