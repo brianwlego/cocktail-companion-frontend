@@ -514,7 +514,6 @@ function renderCocktailDetail(cocktail) {
 
 alcList.addEventListener('click', e => {
   if (e.target.matches('div#alcohol-list')){
-
   } else {
     cocktailByAlcArray.length = 0
     cocktailList.style.display = 'flex'
@@ -529,25 +528,31 @@ alcList.addEventListener('click', e => {
           cocktailByAlcArray.push(ingre)
       }
     }
-    const sortedArray = []
+    const bigArray = []
     for (const ingre of cocktailByAlcArray) {
       for (const cocktail of ingre.cocktails) {
-        sortedArray.push(cocktail)
+        bigArray.push(cocktail)
       }
     }
-    sortedArray.sort((a, b) => (a.name > b.name) ? 1 : -1)
-    for (const cocktail of sortedArray){
+    const result = []
+    const map = new Map()
+    for (const item of bigArray) {
+        if(!map.has(item.name)){
+            map.set(item.name, true);
+            result.push({
+                name: item.name,
+                id: item.id,
+            });
+        }
+    }
+    result.sort((a, b) => (a.name > b.name) ? 1 : -1)
+    for (const cocktail of result){
     cocktailList.insertAdjacentHTML('beforeend', `
         <button onclick="loadCocktail(${cocktail.id})" type='cocktail-button' class='cocktail-btn fade-in' data-hover="View Recipe"><div>${cocktail.name}</div></button>
         `)
     }
-
     cocktailList.insertAdjacentHTML('afterbegin', `
     <button class="close" type="button" onclick="closeDetail()">×</button>
     `)
   }
 })
-
-
-
-
