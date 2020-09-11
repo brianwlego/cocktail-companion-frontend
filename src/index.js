@@ -98,23 +98,25 @@ document.addEventListener('click', e => {
     // NEW COCKTAIL FORM//
   } else if (e.target.matches('button#new-cocktail')){
     modal.style.display = "flex"
-    const editinput = document.getElementById('ingredients-input')
     document.querySelector('button#form-submit-btn').innerText = "Create New Cocktail"
     document.querySelector('h3#form-header').innerText = "Create New Cocktail"
-    autocomplete(editinput, ingredientsArray)
-    const array = getCategoryArray(ingredientsArray)
-    createCategoryDatalist(array)
-    cocktailForm()
+   
+    if (!modal.dataset.inuse) {
+      cocktailForm()
+      modal.dataset.inuse = "true"
+    }
+
 
     //EDIT COCKTAIL FORM //
   } else if (e.target.matches('button#edit-cocktail')){
     modal.style.display = "flex"
-    const editinput = document.getElementById('ingredients-input')
-    autocomplete(editinput, ingredientsArray)
-    const array = getCategoryArray(ingredientsArray)
-    createCategoryDatalist(array)
-    cocktailForm()
-    populateFormWithCockTailData(e.target.dataset.id)
+
+    if (!modal.dataset.inuse) {
+      cocktailForm()
+      populateFormWithCockTailData(e.target.dataset.id)
+      modal.dataset.inuse = "true"
+      modal.dataset.edit = "true"
+    }
   }
 })
 
@@ -128,8 +130,18 @@ function closeModal(){
   formIngDiv.innerHTML = ""
 }
 window.onclick = e => {
-  if (e.target == modal || e.target == detailClose){
+  if (e.target == detailClose){
     closeModal()
+    delete modal.dataset.inuse
+  } else if (e.target == modal) {
+    if (modal.dataset.edit) {
+      closeModal()
+      delete modal.dataset.edit
+      delete modal.dataset.inuse
+    } else {
+      modal.style.display = "none"
+      delete modal.dataset.inuse
+    }
   }
 }
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
@@ -247,6 +259,7 @@ function addIngreToPageEditForm(ingObj, amtString){
   }
   function createCategoryDatalist(catArray){
     const datalist = document.querySelector('datalist#categorys')
+    datalist.innerHTML = ""
     for (const cat of catArray){
       if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
     }
@@ -262,9 +275,15 @@ function addIngreToPageEditForm(ingObj, amtString){
   function cocktailForm(){
     const h3 = document.querySelector('h3#form-header')  
     const submitBtn = document.querySelector('#form-submit-btn')
+    const editinput = document.getElementById('ingredients-input')
+    autocomplete(editinput, ingredientsArray)
+    const array = getCategoryArray(ingredientsArray)
+    createCategoryDatalist(array)  
+
+
       submitBtn.addEventListener('click', e => {
         // e.preventDefault()
-        if (e.target.matches('button#form-submit-btn')){
+        if (e.target.matches('button#form-submit-btn') && modal.dataset.inuse){
           const form = e.target.parentElement.children
           const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
           const measArrayNewObjs = createNewMeasurements(measurementUls)
@@ -276,6 +295,7 @@ function addIngreToPageEditForm(ingObj, amtString){
             thumbnail: form[7].value,
             measurements_attributes: measArrayNewObjs
           }
+          delete modal.dataset.inuse
           if (h3.dataset.id){
             newCocktail.id = h3.dataset.id
             fetchPatchCocktail(newCocktail, h3.dataset.id)
