@@ -1,5 +1,5 @@
 
-const baseURL = 'http://localhost:3000/'
+const baseURL = 'https://cocktailcompanion-api.herokuapp.com/'
 const ingredients = 'ingredients/'
 const cocktails = 'cocktails/'
 //MAIN SEARCH ELEMENTS
@@ -45,6 +45,7 @@ fetch(baseURL + ingredients)
     for (const i of result) {
       ingredientsArray.push(i)
     }
+    console.log(result)
   })
   
 // ------------ FETCH FOR ALL COCKTAILS W/ ING ASSOCIATION -------- //
@@ -285,10 +286,6 @@ function addIngreToPageEditForm(ingObj, amtString){
     autocomplete(editinput, ingredientsArray)
     const h3 = document.querySelector('h3#form-header')  
     const submitBtn = document.querySelector('#form-submit-btn')
-    const editinput = document.getElementById('ingredients-input')
-    autocomplete(editinput, ingredientsArray)
-    const array = getCategoryArray(ingredientsArray)
-    createCategoryDatalist(array)  
 
 
       submitBtn.addEventListener('click', e => {
