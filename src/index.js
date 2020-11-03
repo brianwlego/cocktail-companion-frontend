@@ -101,25 +101,23 @@ document.addEventListener('click', e => {
     modal.style.display = "flex"
     document.querySelector('button#form-submit-btn').innerText = "Create New Cocktail"
     document.querySelector('h3#form-header').innerText = "Create New Cocktail"
-
-    if (!modal.dataset.inuse){
-      // console.log('before cocktailForm()')
+  
+    if (!modal.dataset.inuse) {
       cocktailForm()
       modal.dataset.inuse = "true"
-    } 
-    
+    }
+
 
     //EDIT COCKTAIL FORM //
   } else if (e.target.matches('button#edit-cocktail')){
     modal.style.display = "flex"
 
-    if (!modal.dataset.inuse){
+    if (!modal.dataset.inuse) {
       cocktailForm()
       populateFormWithCockTailData(e.target.dataset.id)
       modal.dataset.inuse = "true"
       modal.dataset.edit = "true"
     }
-    
   }
 })
 
@@ -135,17 +133,17 @@ function closeModal(){
 window.onclick = e => {
   if (e.target == detailClose){
     closeModal()
-    delete modal.dataset.edit
     delete modal.dataset.inuse
-  } else if (e.target == modal){
-    if (modal.dataset.edit){
+    delete modal.dataset.edit
+  } else if (e.target == modal) {
+    if (modal.dataset.edit) {
       closeModal()
       delete modal.dataset.edit
       delete modal.dataset.inuse
     } else {
       modal.style.display = "none"
-      delete modal.dataset.edit
       delete modal.dataset.inuse
+      delete modal.dataset.edit
     }
   }
 }
@@ -287,9 +285,14 @@ function addIngreToPageEditForm(ingObj, amtString){
     autocomplete(editinput, ingredientsArray)
     const h3 = document.querySelector('h3#form-header')  
     const submitBtn = document.querySelector('#form-submit-btn')
-    
+    const editinput = document.getElementById('ingredients-input')
+    autocomplete(editinput, ingredientsArray)
+    const array = getCategoryArray(ingredientsArray)
+    createCategoryDatalist(array)  
+
+
       submitBtn.addEventListener('click', e => {
-        console.log('inside submitbutton listener')
+        // e.preventDefault()
         if (e.target.matches('button#form-submit-btn') && modal.dataset.inuse){
           const form = e.target.parentElement.children
           const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
