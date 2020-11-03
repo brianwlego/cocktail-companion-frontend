@@ -45,7 +45,7 @@ fetch(baseURL + ingredients)
     for (const i of result) {
       ingredientsArray.push(i)
     }
-    console.log(result)
+
   })
   
 // ------------ FETCH FOR ALL COCKTAILS W/ ING ASSOCIATION -------- //
