@@ -27,7 +27,7 @@ const cocktailDetail = document.querySelector('#cocktail-detail')
 //CONTAINS ALL INGS W/OUT ASSOCIATION//
 const ingredientsArray = []
 //USER ADDS-REMOVES INGS//
-const ingArray = []
+let ingArray = []
 //CONTAINS ALL COCKTAILS W/ING ASSOCIATION//
 const cocktailsArray = []
 //USED TO RENDER COCKTAIL LIST BY CHOSEN ALCOHOL//
@@ -97,24 +97,29 @@ document.addEventListener('click', e => {
   
     // NEW COCKTAIL FORM//
   } else if (e.target.matches('button#new-cocktail')){
+    // console.log('inside click listener')
     modal.style.display = "flex"
-    const editinput = document.getElementById('ingredients-input')
     document.querySelector('button#form-submit-btn').innerText = "Create New Cocktail"
     document.querySelector('h3#form-header').innerText = "Create New Cocktail"
-    autocomplete(editinput, ingredientsArray)
-    const array = getCategoryArray(ingredientsArray)
-    createCategoryDatalist(array)
-    cocktailForm()
+
+    if (!modal.dataset.inuse){
+      // console.log('before cocktailForm()')
+      cocktailForm()
+      modal.dataset.inuse = "true"
+    } 
+    
 
     //EDIT COCKTAIL FORM //
   } else if (e.target.matches('button#edit-cocktail')){
     modal.style.display = "flex"
-    const editinput = document.getElementById('ingredients-input')
-    autocomplete(editinput, ingredientsArray)
-    const array = getCategoryArray(ingredientsArray)
-    createCategoryDatalist(array)
-    cocktailForm()
-    populateFormWithCockTailData(e.target.dataset.id)
+
+    if (!modal.dataset.inuse){
+      cocktailForm()
+      populateFormWithCockTailData(e.target.dataset.id)
+      modal.dataset.inuse = "true"
+      modal.dataset.edit = "true"
+    }
+    
   }
 })
 
@@ -128,8 +133,20 @@ function closeModal(){
   formIngDiv.innerHTML = ""
 }
 window.onclick = e => {
-  if (e.target == modal || e.target == detailClose){
+  if (e.target == detailClose){
     closeModal()
+    delete modal.dataset.edit
+    delete modal.dataset.inuse
+  } else if (e.target == modal){
+    if (modal.dataset.edit){
+      closeModal()
+      delete modal.dataset.edit
+      delete modal.dataset.inuse
+    } else {
+      modal.style.display = "none"
+      delete modal.dataset.edit
+      delete modal.dataset.inuse
+    }
   }
 }
 // ----------------- AUTO COMPLETE FUNCTIONALITY -------------//
@@ -247,6 +264,7 @@ function addIngreToPageEditForm(ingObj, amtString){
   }
   function createCategoryDatalist(catArray){
     const datalist = document.querySelector('datalist#categorys')
+    datalist.innerHTML = ""
     for (const cat of catArray){
       if (cat) datalist.insertAdjacentHTML('afterbegin', `<option value="${cat}">`)
     }
@@ -258,13 +276,21 @@ function addIngreToPageEditForm(ingObj, amtString){
     }
     return measObjArray
   }
+
   // ADDS EVENT LISTENER & GRABS ALL VALUES OFF OF FORM
   function cocktailForm(){
+    console.log('inside cocktailForm')
+
+    const array = getCategoryArray(ingredientsArray)
+    createCategoryDatalist(array)
+    const editinput = document.getElementById('ingredients-input')
+    autocomplete(editinput, ingredientsArray)
     const h3 = document.querySelector('h3#form-header')  
     const submitBtn = document.querySelector('#form-submit-btn')
+    
       submitBtn.addEventListener('click', e => {
-        // e.preventDefault()
-        if (e.target.matches('button#form-submit-btn')){
+        console.log('inside submitbutton listener')
+        if (e.target.matches('button#form-submit-btn') && modal.dataset.inuse){
           const form = e.target.parentElement.children
           const measurementUls = [...document.querySelector('div#ingre-list-placeholder').children]
           const measArrayNewObjs = createNewMeasurements(measurementUls)
@@ -276,17 +302,17 @@ function addIngreToPageEditForm(ingObj, amtString){
             thumbnail: form[7].value,
             measurements_attributes: measArrayNewObjs
           }
+          delete modal.dataset.inuse
           if (h3.dataset.id){
             newCocktail.id = h3.dataset.id
             fetchPatchCocktail(newCocktail, h3.dataset.id)
           } else {
             newCocktail.user_made = true
+            console.log('before fetchpost')
             fetchPostNewCocktail(newCocktail)
           }
         }  
-        autocomplete(ingreInput, ingredientsArray)
       })
-
   }
 
   // -------------------- FETCH FOR NEW COCKTAIL ---------------------- //
@@ -304,6 +330,7 @@ function addIngreToPageEditForm(ingObj, amtString){
       cocktailsArray.push(result)
       renderCocktailDetail(result)
       closeModal()
+      console.log('after POST')
     } else {
       modal.style.display = "none"
     }
@@ -340,8 +367,6 @@ function populateFormWithCockTailData(cocktailId){
 // --------------- FETCH FOR PATCH FORM ------------------ //
 
 function fetchPatchCocktail(cocktailObj, cocktailId){
-  console.dir(cocktailObj)
-  console.dir(cocktailId)
   configObj = {
     method: 'PATCH', 
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
@@ -467,6 +492,7 @@ function closeDetail(id) {
     cocktailList.style.display = 'none'
     list.innerHTML = ""
     ingArray.length = 0
+    ingListDataIds.length = 0
     allIcons.forEach( e => e.classList.remove('active'))
 
   }
@@ -507,8 +533,6 @@ function renderCocktailDetail(cocktail) {
   cocktailDetail.classList.add('fade-in')
 }
 
-{/* <h4 class='c-titles'>Ingredients</h4>
-<h4 class='c-titles'>Instructions</h4> */}
 //-------------- CLICK LISTENER FOR ALCOHOL ICONS ----------------- //
 
 
