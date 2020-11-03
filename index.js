@@ -522,8 +522,8 @@ function renderCocktailDetail(cocktail) {
     <p class='fade-in' id='glass-type'>Served in a ${cocktail.glass}</p>
   </div>
   <p class='fade-in' id='cocktail-desc'>${cocktail.instructions}</p>
-  <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button>
   `
+{/* <button class='fade-in' id="edit-cocktail" data-id="${cocktail.id}">Edit Cocktail</button> */}
 
   if (cocktail.user_made === true) {
     cocktailDetail.insertAdjacentHTML('beforeend', `
