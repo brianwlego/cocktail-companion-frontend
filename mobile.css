@@ -1,0 +1,29 @@
+@media screen and (max-width: 450px) {
+
+  #page-container{
+    flex-direction: column;
+    height: fit-content;
+  }
+
+  .main-divs{
+    width: 80vw;
+    height: 90vh;
+    margin: 20px 0;
+  }
+
+  #alcohol-list{
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  .alc-icon{
+    max-width: none;
+    padding: 5px;
+  }
+
+  .alc-icon img{
+    height: 100px;
+    width: 100px;
+  }
+
+}
