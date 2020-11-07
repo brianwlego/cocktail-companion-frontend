@@ -26,4 +26,7 @@
     width: 100px;
   }
 
+  #new-cocktail{
+    display: none;
+  }
 }
