@@ -275,7 +275,8 @@ button#edit-cocktail{
   width: -webkit-fill-available;
   height: -webkit-fill-available;
   overflow: scroll;
-  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap
 }
 
 figure.active {
@@ -417,3 +418,10 @@ margin: 0;
     opacity:1;
   }
 }
+
+
+/* @media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+} */
